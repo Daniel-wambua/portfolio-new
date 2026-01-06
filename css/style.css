@@ -698,7 +698,9 @@ a:hover {
 
 .contact-right {
     display: flex;
-    justify-content: flex-end
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem
 }
 
 .email {
@@ -919,4 +921,31 @@ a:hover {
 
 .portfolio-cta a:hover {
     border-bottom-color: var(--accent-secondary, var(--accent-primary))
+}
+
+/* WhatsApp Button */
+.whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    padding: 0.85rem 1.5rem;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-decoration: none;
+    border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
+    transition: all 0.3s ease;
+}
+
+.whatsapp-btn:hover {
+    background: linear-gradient(135deg, #128C7E, #075E54);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6);
+}
+
+.whatsapp-btn svg {
+    flex-shrink: 0;
 }

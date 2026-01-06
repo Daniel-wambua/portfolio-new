@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniel Wambua | Portfolio</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animation.css">
+</head>
+
+<body class="theme-dark-amethyst">
+    <div id="particles-js"></div>
+    <div class="theme-switcher-container"><button id="theme-switcher" aria-label="Switch Theme">🌗</button></div>
+    <div class="content-layout">
+        <main class="content-scroll">
+            <section class="hero"><img src="images/profile.png" alt="Profile Photo" />
+                <div class="hero-name">
+                    <h1>Daniel Wambua</h1>
+                    <p class="intro">I'm a security researcher and bug bounty hunter focused on finding real-world web and API vulnerabilities. I hunt bugs on live targets, break down complex flaws through hands-on analysis, and document my work through clear technical write-ups. You can find them here: <a href="https://havocsec.me" target="_blank" rel="noopener noreferrer">havocsec.me</a></p>
+                    <a href="https://danielwambua.dev/downloads/Daniel-Wambua-CV.pdf" class="btn-cv" download>
+                        <span class="btn-cv-icon">📄</span>
+                        <span class="btn-cv-text">Download CV</span>
+                        <span class="btn-cv-arrow">↓</span>
+                    </a>
+                </div>
+            </section>
+            <div class="tags-container">
+                <button class="tag active" data-tag="all">All</button>
+                <button class="tag" data-tag="ctf">🚩 CTF</button>
+                <button class="tag" data-tag="pentesting">🔓 Pentesting</button>
+                <button class="tag" data-tag="htb">💀 HackTheBox</button>
+                <button class="tag" data-tag="github">🔧 GitHub</button>
+                <button class="tag" data-tag="crypto">🔐 Crypto</button>
+                <button class="tag" data-tag="osint">🔍 OSINT</button>
+            </div>
+            <section class="content-box">
+                <section class="about animate-card" id="about">
+                    <h2>About me</h2>
+                    <p class="decore">I'm a <b>cybersecurity student</b> and self-driven <b>security researcher</b> with a strong focus on learning by breaking. I spend most of my time practicing offensive security through bug bounty programs, CTF challenges, and hands-on labs rather than passive learning.<br><br>
+                        I've consciously decided to stop bouncing between roles and disciplines. <b>Cybersecurity is the core</b>. Development is a supporting weapon, not the destination. This clarity lets me compound skills faster and avoid the trap of being "almost good" at many things and excellent at none.<br><br>
+                        I document what I learn, analyze failures honestly, and iterate aggressively. My long-term objective is to become a <b>high-impact bug bounty hunter</b> and security researcher whose work speaks through <i>findings</i>, <i>write-ups</i>, and <i>tools</i> — not buzzwords.</p>
+                    <div class="portfolio-cta">
+                        <p>📌 <strong>This is the brief portfolio.</strong> For deep depth and full info, visit the unbriefed one → <a href="https://danielwambua.dev" target="_blank" rel="noopener noreferrer">danielwambua.dev</a></p>
+                    </div>
+                </section>
+                <section class="projects" id="projects">
+                    <h2> Projects</h2>
+                    <div class="project-list" id="rss-projects">
+                        <!-- Projects loaded dynamically from RSS feed -->
+                        <div class="loading-placeholder">
+                            <p>Loading latest posts from havocsec.me...</p>
+                        </div>
+                    </div>
+                </section>
+                <section class="highlights" id="highlights">
+                    <h2>Highlights</h2>
+                    <div class="highlights-grid">
+                        <div class="highlight-card htb-card">
+                            <div class="highlight-content htb-content">
+                                <h4>🎯 HackTheBox</h4>
+                                <a href="https://app.hackthebox.com/profile/2081158" target="_blank" rel="noopener noreferrer">
+                                    <img src="https://www.hackthebox.eu/badge/image/2081158" alt="HackTheBox Profile" class="htb-badge" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="highlight-card">
+                            <div class="highlight-icon">💻</div>
+                            <div class="highlight-content">
+                                <h4>GitHub Activity</h4>
+                                <p class="stat-number" id="github-contributions">Loading...</p>
+                                <p class="stat-label">contributions this year</p>
+                            </div>
+                        </div>
+                        <div class="highlight-card">
+                            <div class="highlight-icon">🔓</div>
+                            <div class="highlight-content">
+                                <h4>Bug Bounty</h4>
+                                <p class="stat-label">Active hunter on</p>
+                                <p class="platforms">
+                                    <a href="https://hackerone.com" target="_blank" rel="noopener noreferrer">HackerOne</a> • 
+                                    <a href="https://bugcrowd.com" target="_blank" rel="noopener noreferrer">Bugcrowd</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="highlight-card">
+                            <div class="highlight-icon">📦</div>
+                            <div class="highlight-content">
+                                <h4>Open Source</h4>
+                                <p class="stat-number" id="github-repos">Loading...</p>
+                                <p class="stat-label">public repositories</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="contact" id="contact">
+                    <h2>Contact</h2>
+                    <div class="contact-box">
+                        <div class="contact-left">
+                            <p class="email">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                <a href="mailto:richiehavoc@proton.me">richiehavoc@proton.me</a>
+                            </p>
+                        </div>
+                        <div class="contact-right">
+                            <div class="social-links">
+                                <a href="https://github.com/Daniel-wambua" aria-label="GitHub" class="social-icon" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                                <a href="https://www.linkedin.com/in/daniel-wambua-a312b32b8/" aria-label="LinkedIn" class="social-icon" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="28" height="28" viewBox="0 0 30 30"><path d="M24,4H6C4.895,4,4,4.895,4,6v18c0,1.105,0.895,2,2,2h18c1.105,0,2-0.895,2-2V6C26,4.895,25.105,4,24,4z M10.954,22h-2.95 v-9.492h2.95V22z M9.449,11.151c-0.951,0-1.72-0.771-1.72-1.72c0-0.949,0.77-1.719,1.72-1.719c0.948,0,1.719,0.771,1.719,1.719 C11.168,10.38,10.397,11.151,9.449,11.151z M22.004,22h-2.948v-4.616c0-1.101-0.02-2.517-1.533-2.517 c-1.535,0-1.771,1.199-1.771,2.437V22h-2.948v-9.492h2.83v1.297h0.04c0.394-0.746,1.356-1.533,2.791-1.533 c2.987,0,3.539,1.966,3.539,4.522V22z"></path></svg></a>
+                                <a href="https://x.com/HavocRichie" aria-label="X" class="social-icon" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="28" height="28" viewBox="0 0 50 50"><path d="M 5.9199219 6 L 20.582031 27.375 L 6.2304688 44 L 9.4101562 44 L 21.986328 29.421875 L 31.986328 44 L 44 44 L 28.681641 21.669922 L 42.199219 6 L 39.029297 6 L 27.275391 19.617188 L 17.933594 6 L 5.9199219 6 z M 9.7167969 8 L 16.880859 8 L 40.203125 42 L 33.039062 42 L 9.7167969 8 z"></path></svg></a>
+                                <a href="https://www.tiktok.com/@richie_havoc" aria-label="TikTok" class="social-icon" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg></a>
+                                <a href="https://havocsec.me" aria-label="Blog" class="social-icon" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+    <script src="js/script.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/animation.js"></script>
+</body>
+
+</html>

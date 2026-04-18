@@ -2,12 +2,24 @@
 
 A modern, cyberpunk-themed portfolio showcasing security research, CTF writeups, and open-source tools.
 
-![Portfolio Preview](https://img.shields.io/badge/Status-Live-brightgreen) ![License](https://img.shields.io/badge/License-MIT-blue)
+<p align="center">
+  <img src="images/project-logo.svg" alt="HavocSec Portfolio Logo" width="720" />
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Live-19C37D?style=for-the-badge" alt="Status Live" />
+  <img src="https://img.shields.io/badge/License-MIT-3B82F6?style=for-the-badge" alt="MIT License" />
+  <img src="https://img.shields.io/badge/Deployed%20On-Vercel-000000?style=for-the-badge&logo=vercel" alt="Deployed on Vercel" />
+  <img src="https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?style=for-the-badge&logo=javascript&logoColor=111111" alt="Vanilla JavaScript" />
+  <img src="https://img.shields.io/badge/Responsive-Yes-0EA5E9?style=for-the-badge" alt="Responsive" />
+  <img src="https://img.shields.io/badge/Themes-12-8B5CF6?style=for-the-badge" alt="12 Themes" />
+  <img src="https://img.shields.io/badge/RSS%20Feed-Integrated-F97316?style=for-the-badge&logo=rss" alt="RSS Integrated" />
+</p>
 
 ## ✨ Features
 
 - **12 Cyberpunk Themes** - Neon Tokyo, Dark Amethyst, Matrix Green, Synthwave, and more
-- **Dynamic Content** - Auto-fetches latest CTF writeups from [havocsec.me](https://havocsec.me) RSS feed
+- **Dynamic Content** - Auto-fetches latest CTF writeups from [havocsec.dev](https://havocsec.dev) RSS feed
 - **GitHub Integration** - Displays featured repositories with live stats
 - **HackTheBox Badge** - Live HTB profile stats
 - **Animated Particles** - Interactive particle.js background
@@ -16,7 +28,7 @@ A modern, cyberpunk-themed portfolio showcasing security research, CTF writeups,
 
 ## 🚀 Live Demo
 
-- **Brief Portfolio**: [portfolio.havocsec.me](https://portfolio.havocsec.me)
+- **Brief Portfolio**: [portfolio.havocx.me](https://portfolio.havocx.me)
 - **Full Portfolio**: [danielwambua.dev](https://danielwambua.dev)
 
 ## 🛠️ Tech Stack
@@ -87,7 +99,7 @@ vercel
 ```
 
 ## 📬 Contact
-- **Blog**: [havocsec.me](https://havocsec.me)
+- **Blog**: [havocsec.dev](https://havocsec.dev)
 - **GitHub**: [@Daniel-wambua](https://github.com/Daniel-wambua)
 - **HackTheBox**: [Profile](https://app.hackthebox.com/profile/2081158)
 
@@ -123,5 +135,5 @@ SOFTWARE.
 ---
 
 <p align="center">
-  <sub>Built with 💜 by <a href="https://linktree.havocsec.me">Daniel Wambua</a></sub>
+  <sub>Built with 💜 by <a href="https://guns/lol/0xhavoc">Daniel Wambua</a></sub>
 </p>

@@ -103,12 +103,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // RSS Feed Configuration
 const RSS_CONFIG = {
-    feedUrl: 'https://havocsec.me/rss.xml',
-    corsProxy: 'https://api.allorigins.win/raw?url=',
+    feedUrl: 'https://havocsec.dev/rss.xml',
+    corsProxies: [
+        'https://api.allorigins.win/raw?url=',
+        'https://cors.isomorphic-git.org/',
+        'https://r.jina.ai/http://'
+    ],
     maxCtfPosts: 2,        // 2 CTF posts
     maxPentestPosts: 2,    // 2 Pentesting posts
     allowedTypes: ['ctf', 'pentesting'],
-    timeout: 5000
+    timeout: 5000,
+    retryAttempts: 2,
+    retryDelayMs: 300
 };
 
 // GitHub Configuration
@@ -126,18 +132,29 @@ async function loadProjects() {
 
     try {
         // Fetch both RSS and GitHub data in parallel with timeout
-        const [rssPosts, githubRepos] = await Promise.all([
+        const [rssResult, githubResult] = await Promise.allSettled([
             Promise.race([
                 fetchRSSFeed(),
-                new Promise((_, reject) => setTimeout(() => reject('RSS timeout'), RSS_CONFIG.timeout))
-            ]).catch(() => []),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('RSS timeout')), RSS_CONFIG.timeout))
+            ]),
             Promise.race([
                 fetchGitHubRepos(),
-                new Promise((_, reject) => setTimeout(() => reject('GitHub timeout'), GITHUB_CONFIG.timeout))
-            ]).catch(() => [])
+                new Promise((_, reject) => setTimeout(() => reject(new Error('GitHub timeout')), GITHUB_CONFIG.timeout))
+            ])
         ]);
 
+        const rssPosts = rssResult.status === 'fulfilled' ? rssResult.value : [];
+        const githubRepos = githubResult.status === 'fulfilled' ? githubResult.value : [];
+        const rssError = rssResult.status === 'rejected' ? rssResult.reason : null;
+
         container.innerHTML = '';
+
+        if (rssError && githubRepos.length > 0) {
+            const warning = document.createElement('div');
+            warning.className = 'error-message';
+            warning.innerHTML = '<p>Latest writeups are temporarily unavailable (RSS provider issue).</p>';
+            container.appendChild(warning);
+        }
         
         // Render RSS posts (CTF & Pentesting writeups)
         if (rssPosts.length > 0) {
@@ -150,7 +167,7 @@ async function loadProjects() {
             writeupSection.innerHTML += `
                 <div class="see-more-container">
                     <p class="see-more-text">Find more CTF writeups and pentesting guides here</p>
-                    <a href="https://havocsec.me" class="btn" target="_blank" rel="noopener noreferrer">Visit havocsec.me →</a>
+                    <a href="https://havocsec.dev" class="btn" target="_blank" rel="noopener noreferrer">Visit havocsec.dev →</a>
                 </div>
             `;
             container.appendChild(writeupSection);
@@ -179,7 +196,7 @@ async function loadProjects() {
                 <div class="error-message">
                     <p>Projects loading slowly? Visit directly:</p>
                     <div class="project-links" style="justify-content: center; margin-top: 1rem;">
-                        <a href="https://havocsec.me" class="btn" target="_blank">havocsec.me</a>
+                        <a href="https://havocsec.dev" class="btn" target="_blank">havocsec.dev</a>
                         <a href="https://github.com/Daniel-wambua" class="btn" target="_blank">GitHub</a>
                     </div>
                 </div>
@@ -195,7 +212,7 @@ async function loadProjects() {
             <div class="error-message">
                 <p>Unable to load projects. Visit directly:</p>
                 <div class="project-links" style="justify-content: center; margin-top: 1rem;">
-                    <a href="https://havocsec.me" class="btn" target="_blank">havocsec.me</a>
+                    <a href="https://havocsec.dev" class="btn" target="_blank">havocsec.dev</a>
                     <a href="https://github.com/Daniel-wambua" class="btn" target="_blank">GitHub</a>
                 </div>
             </div>
@@ -205,87 +222,127 @@ async function loadProjects() {
 
 // Fetch and parse RSS feed (CTF & Pentesting only)
 async function fetchRSSFeed() {
-    try {
-        // Always use CORS proxy for cross-origin requests
-        const proxyUrl = RSS_CONFIG.corsProxy + encodeURIComponent(RSS_CONFIG.feedUrl);
-        const response = await fetch(proxyUrl);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-        
-        const text = await response.text();
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(text, 'text/xml');
-        
-        // Check for parsing errors
-        const parseError = xml.querySelector('parsererror');
-        if (parseError) {
-            throw new Error('XML parsing failed');
-        }
-        
-        const items = xml.querySelectorAll('item');
-        const posts = [];
-        
-        items.forEach((item) => {
-            const title = item.querySelector('title')?.textContent || 'Untitled';
-            const link = item.querySelector('link')?.textContent || '#';
-            const description = item.querySelector('description')?.textContent || '';
-            const pubDate = item.querySelector('pubDate')?.textContent || '';
-            const enclosure = item.querySelector('enclosure');
-            const imageUrl = enclosure?.getAttribute('url') || '';
-            
-            // Get categories/tags
-            const categories = [];
-            item.querySelectorAll('category').forEach(cat => {
-                categories.push(cat.textContent.toLowerCase());
-            });
-            
-            // Determine post type from URL path
-            let postType = 'blog';
-            if (link.includes('/ctf/')) postType = 'ctf';
-            else if (link.includes('/pentesting/') || link.includes('/hackthebox/')) postType = 'pentesting';
-            else if (link.includes('/chitchat/')) postType = 'chitchat';
-            
-            // Only include CTF and Pentesting posts
-            if (!RSS_CONFIG.allowedTypes.includes(postType)) return;
-            
-            // Add postType to categories if not present
-            if (!categories.includes(postType)) {
-                categories.push(postType);
+    const endpointCandidates = [
+        RSS_CONFIG.feedUrl,
+        ...RSS_CONFIG.corsProxies.map(proxy => {
+            if (proxy.includes('r.jina.ai/http://')) {
+                return proxy + RSS_CONFIG.feedUrl.replace(/^https?:\/\//, '');
             }
-            
-            // Clean up double slashes in URLs
-            const cleanLink = link.replace(/([^:]\/)\/+/g, '$1');
-            const cleanImage = imageUrl.replace(/([^:]\/)\/+/g, '$1');
-            
-            posts.push({
-                title,
-                link: cleanLink,
-                description,
-                pubDate: new Date(pubDate),
-                imageUrl: cleanImage,
-                categories,
-                postType
-            });
-        });
-        
-        // Sort by date (newest first) and separate by type
-        posts.sort((a, b) => b.pubDate - a.pubDate);
-        
-        // Get separate arrays for CTF and Pentesting
-        const ctfPosts = posts.filter(p => p.postType === 'ctf').slice(0, RSS_CONFIG.maxCtfPosts);
-        const pentestPosts = posts.filter(p => p.postType === 'pentesting').slice(0, RSS_CONFIG.maxPentestPosts);
-        
-        console.log(`RSS: Found ${ctfPosts.length} CTF posts, ${pentestPosts.length} pentesting posts`);
-        
-        // Combine: CTF first, then pentesting
-        return [...ctfPosts, ...pentestPosts];
-        
-    } catch (error) {
-        console.error('Error fetching RSS feed:', error);
-        return [];
+            if (proxy.includes('cors.isomorphic-git.org')) {
+                return proxy + RSS_CONFIG.feedUrl;
+            }
+            return proxy + encodeURIComponent(RSS_CONFIG.feedUrl);
+        })
+    ];
+
+    let lastError = null;
+
+    for (const endpoint of endpointCandidates) {
+        for (let attempt = 1; attempt <= RSS_CONFIG.retryAttempts; attempt++) {
+            try {
+                const response = await fetch(endpoint, {
+                    headers: {
+                        Accept: 'application/rss+xml, application/xml, text/xml, text/plain, */*'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const text = await response.text();
+                const normalized = text.trim().toLowerCase();
+
+                // Some proxies return plain text errors (for example, "error code: 522").
+                if (!normalized.startsWith('<?xml') && !normalized.startsWith('<rss')) {
+                    throw new Error('Non-XML RSS response');
+                }
+
+                const posts = parseRSSPosts(text);
+                return posts;
+            } catch (error) {
+                lastError = error;
+                if (attempt < RSS_CONFIG.retryAttempts) {
+                    await delay(RSS_CONFIG.retryDelayMs);
+                }
+            }
+        }
     }
+
+    throw lastError || new Error('Unable to fetch RSS feed from all endpoints');
+}
+
+function parseRSSPosts(text) {
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(text, 'text/xml');
+
+    // Check for parsing errors
+    const parseError = xml.querySelector('parsererror');
+    if (parseError) {
+        throw new Error('XML parsing failed');
+    }
+
+    const items = xml.querySelectorAll('item');
+    const posts = [];
+
+    items.forEach((item) => {
+        const title = item.querySelector('title')?.textContent || 'Untitled';
+        const link = item.querySelector('link')?.textContent || '#';
+        const description = item.querySelector('description')?.textContent || '';
+        const pubDate = item.querySelector('pubDate')?.textContent || '';
+        const enclosure = item.querySelector('enclosure');
+        const imageUrl = enclosure?.getAttribute('url') || '';
+
+        // Get categories/tags
+        const categories = [];
+        item.querySelectorAll('category').forEach(cat => {
+            categories.push((cat.textContent || '').toLowerCase());
+        });
+
+        // Determine post type from URL path
+        let postType = 'blog';
+        if (link.includes('/ctf/')) postType = 'ctf';
+        else if (link.includes('/pentesting/') || link.includes('/hackthebox/')) postType = 'pentesting';
+        else if (link.includes('/chitchat/')) postType = 'chitchat';
+
+        // Only include CTF and Pentesting posts
+        if (!RSS_CONFIG.allowedTypes.includes(postType)) return;
+
+        // Add postType to categories if not present
+        if (!categories.includes(postType)) {
+            categories.push(postType);
+        }
+
+        // Clean up double slashes in URLs
+        const cleanLink = link.replace(/([^:]\/)\/{2,}/g, '$1');
+        const cleanImage = imageUrl.replace(/([^:]\/)\/{2,}/g, '$1');
+
+        posts.push({
+            title,
+            link: cleanLink,
+            description,
+            pubDate: new Date(pubDate),
+            imageUrl: cleanImage,
+            categories,
+            postType
+        });
+    });
+
+    // Sort by date (newest first) and separate by type
+    posts.sort((a, b) => b.pubDate - a.pubDate);
+
+    // Get separate arrays for CTF and Pentesting
+    const ctfPosts = posts.filter(p => p.postType === 'ctf').slice(0, RSS_CONFIG.maxCtfPosts);
+    const pentestPosts = posts.filter(p => p.postType === 'pentesting').slice(0, RSS_CONFIG.maxPentestPosts);
+
+    console.log(`RSS: Found ${ctfPosts.length} CTF posts, ${pentestPosts.length} pentesting posts`);
+
+    // Combine: CTF first, then pentesting
+    return [...ctfPosts, ...pentestPosts];
+}
+
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 // Fetch GitHub repos

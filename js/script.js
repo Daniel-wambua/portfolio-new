@@ -223,6 +223,7 @@ async function loadProjects() {
 // Fetch and parse RSS feed (CTF & Pentesting only)
 async function fetchRSSFeed() {
     const endpointCandidates = [
+        '/rss.xml',
         RSS_CONFIG.feedUrl,
         ...RSS_CONFIG.corsProxies.map(proxy => {
             if (proxy.includes('r.jina.ai/http://')) {

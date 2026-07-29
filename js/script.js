@@ -167,7 +167,7 @@ async function loadProjects() {
             writeupSection.innerHTML += `
                 <div class="see-more-container">
                     <p class="see-more-text">Find more CTF writeups and pentesting guides here</p>
-                    <a href="https://havocsec.dev" class="btn" target="_blank" rel="noopener noreferrer">Visit havocsec.dev →</a>
+                    <a href="https://www.havocsec.dev" class="btn" target="_blank" rel="noopener noreferrer">Visit havocsec.dev →</a>
                 </div>
             `;
             container.appendChild(writeupSection);
@@ -196,7 +196,7 @@ async function loadProjects() {
                 <div class="error-message">
                     <p>Projects loading slowly? Visit directly:</p>
                     <div class="project-links" style="justify-content: center; margin-top: 1rem;">
-                        <a href="https://havocsec.dev" class="btn" target="_blank">havocsec.dev</a>
+                        <a href="https://www.havocsec.dev" class="btn" target="_blank">havocsec.dev</a>
                         <a href="https://github.com/Daniel-wambua" class="btn" target="_blank">GitHub</a>
                     </div>
                 </div>
@@ -212,7 +212,7 @@ async function loadProjects() {
             <div class="error-message">
                 <p>Unable to load projects. Visit directly:</p>
                 <div class="project-links" style="justify-content: center; margin-top: 1rem;">
-                    <a href="https://havocsec.dev" class="btn" target="_blank">havocsec.dev</a>
+                    <a href="https://www.havocsec.dev" class="btn" target="_blank">havocsec.dev</a>
                     <a href="https://github.com/Daniel-wambua" class="btn" target="_blank">GitHub</a>
                 </div>
             </div>

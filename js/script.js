@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // RSS Feed Configuration
 const RSS_CONFIG = {
-    feedUrl: 'https://havocsec.dev/rss.xml',
+    feedUrl: 'https://www.havocsec.dev/rss.xml',
     corsProxies: [
         'https://api.allorigins.win/raw?url=',
         'https://cors.isomorphic-git.org/',

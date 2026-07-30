@@ -1,72 +1,3 @@
-document.addEventListener('DOMContentLoaded', function() {
-    if (window.particlesJS) {
-        window.particlesJS('particles-js', {
-            particles: {
-                number: {
-                    value: 60,
-                    density: {
-                        enable: true,
-                        value_area: 800
-                    }
-                },
-                color: {
-                    value: '#ffffff'
-                },
-                shape: {
-                    type: 'circle'
-                },
-                opacity: {
-                    value: 0.5,
-                    random: true
-                },
-                size: {
-                    value: 3,
-                    random: true
-                },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: '#ffffff',
-                    opacity: 0.4,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 2,
-                    direction: 'none',
-                    random: false,
-                    straight: false,
-                    out_mode: 'out',
-                    bounce: false
-                }
-            },
-            interactivity: {
-                detect_on: 'canvas',
-                events: {
-                    onhover: {
-                        enable: true,
-                        mode: 'repulse'
-                    },
-                    onclick: {
-                        enable: true,
-                        mode: 'push'
-                    },
-                    resize: true
-                },
-                modes: {
-                    repulse: {
-                        distance: 100,
-                        duration: 0.4
-                    },
-                    push: {
-                        particles_nb: 4
-                    }
-                }
-            },
-            retina_detect: true
-        });
-    }
-});
 const themes = [
     'theme-neon-tokyo', 
     'theme-dark-amethyst', 
@@ -102,17 +33,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // RSS Feed Configuration
+// NOTE: the `www` host is required. The apex host (havocsec.dev) answers with a
+// 308 redirect that carries no Access-Control-Allow-Origin header, and browsers
+// enforce CORS on the redirect response itself, so the apex URL is unfetchable
+// from the browser. `www.havocsec.dev` serves the feed with ACAO `*`, so it can
+// be fetched directly and no CORS proxy is needed.
 const RSS_CONFIG = {
-    feedUrl: 'https://havocsec.dev/rss.xml',
+    feedUrl: 'https://www.havocsec.dev/rss.xml',
+    // Last-resort mirror, only tried if the direct fetch fails.
     corsProxies: [
-        'https://api.allorigins.win/raw?url=',
-        'https://cors.isomorphic-git.org/',
-        'https://r.jina.ai/http://'
+        'https://api.allorigins.win/raw?url='
     ],
     maxCtfPosts: 2,        // 2 CTF posts
     maxPentestPosts: 2,    // 2 Pentesting posts
     allowedTypes: ['ctf', 'pentesting'],
-    timeout: 5000,
+    timeout: 8000,
     retryAttempts: 2,
     retryDelayMs: 300
 };
@@ -161,15 +96,23 @@ async function loadProjects() {
             const writeupSection = document.createElement('div');
             writeupSection.className = 'project-section';
             writeupSection.innerHTML = '<h3 class="section-title">🚩 Latest Writeups</h3>';
-            rssPosts.forEach(post => renderRSSPost(post, writeupSection));
-            
-            // Add "See more" link for writeups
-            writeupSection.innerHTML += `
+
+            // Cards live in their own .project-list child so the grid columns in
+            // style.css apply and they sit side by side. The heading and the CTA
+            // stay outside that child, as full-width siblings.
+            const writeupList = document.createElement('div');
+            writeupList.className = 'project-list';
+            rssPosts.forEach(post => renderRSSPost(post, writeupList));
+            writeupSection.appendChild(writeupList);
+
+            // insertAdjacentHTML rather than `innerHTML +=`, which would reserialize
+            // and reparse every card that was just built.
+            writeupSection.insertAdjacentHTML('beforeend', `
                 <div class="see-more-container">
                     <p class="see-more-text">Find more CTF writeups and pentesting guides here</p>
                     <a href="https://havocsec.dev" class="btn" target="_blank" rel="noopener noreferrer">Visit havocsec.dev →</a>
                 </div>
-            `;
+            `);
             container.appendChild(writeupSection);
         }
         
@@ -178,15 +121,18 @@ async function loadProjects() {
             const githubSection = document.createElement('div');
             githubSection.className = 'project-section';
             githubSection.innerHTML = '<h3 class="section-title">🔧 Featured Tools</h3>';
-            githubRepos.forEach(repo => renderGitHubRepo(repo, githubSection));
-            
-            // Add "See more" link for GitHub
-            githubSection.innerHTML += `
+
+            const githubList = document.createElement('div');
+            githubList.className = 'project-list';
+            githubRepos.forEach(repo => renderGitHubRepo(repo, githubList));
+            githubSection.appendChild(githubList);
+
+            githubSection.insertAdjacentHTML('beforeend', `
                 <div class="see-more-container">
                     <p class="see-more-text">Explore more security tools and projects</p>
                     <a href="https://github.com/Daniel-wambua" class="btn" target="_blank" rel="noopener noreferrer">View GitHub →</a>
                 </div>
-            `;
+            `);
             container.appendChild(githubSection);
         }
         
@@ -223,17 +169,10 @@ async function loadProjects() {
 // Fetch and parse RSS feed (CTF & Pentesting only)
 async function fetchRSSFeed() {
     const endpointCandidates = [
-        '/rss.xml',
         RSS_CONFIG.feedUrl,
-        ...RSS_CONFIG.corsProxies.map(proxy => {
-            if (proxy.includes('r.jina.ai/http://')) {
-                return proxy + RSS_CONFIG.feedUrl.replace(/^https?:\/\//, '');
-            }
-            if (proxy.includes('cors.isomorphic-git.org')) {
-                return proxy + RSS_CONFIG.feedUrl;
-            }
-            return proxy + encodeURIComponent(RSS_CONFIG.feedUrl);
-        })
+        ...RSS_CONFIG.corsProxies.map(
+            proxy => proxy + encodeURIComponent(RSS_CONFIG.feedUrl)
+        )
     ];
 
     let lastError = null;
@@ -314,9 +253,10 @@ function parseRSSPosts(text) {
             categories.push(postType);
         }
 
-        // Clean up double slashes in URLs
-        const cleanLink = link.replace(/([^:]\/)\/{2,}/g, '$1');
-        const cleanImage = imageUrl.replace(/([^:]\/)\/{2,}/g, '$1');
+        // Collapse duplicate slashes in the path while preserving the `https://`
+        // scheme separator. The feed emits links like `https://havocsec.dev//ctf/x`.
+        const cleanLink = collapseSlashes(link);
+        const cleanImage = imageUrl ? canonicalizeHost(collapseSlashes(imageUrl)) : '';
 
         posts.push({
             title,
@@ -340,6 +280,16 @@ function parseRSSPosts(text) {
 
     // Combine: CTF first, then pentesting
     return [...ctfPosts, ...pentestPosts];
+}
+
+function collapseSlashes(url) {
+    return url.replace(/(https?:\/\/)|\/{2,}/g, (match, scheme) => scheme || '/');
+}
+
+// The feed emits apex-host URLs, which answer with a 308 to the `www` host.
+// Point straight at `www` so images and links skip that extra round trip.
+function canonicalizeHost(url) {
+    return url.replace(/^https?:\/\/havocsec\.dev/, 'https://www.havocsec.dev');
 }
 
 function delay(ms) {
@@ -539,6 +489,10 @@ async function loadGitHubStats() {
 
 // Initialize everything on page load
 document.addEventListener('DOMContentLoaded', () => {
+    // Footer year, so the copyright line never goes stale.
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
     loadProjects();
     loadGitHubStats();
 });

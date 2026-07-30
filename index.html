@@ -4,70 +4,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daniel Wambua | Portfolio</title>
-        <meta name="description" content="Daniel Wambua's cybersecurity portfolio featuring CTF writeups, bug bounty research, pentesting notes, and open-source security tools.">
-        <meta name="keywords" content="Daniel Wambua, cybersecurity, bug bounty, pentesting, CTF writeups, security researcher, HackTheBox">
-        <meta name="author" content="Daniel Wambua">
-        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-        <meta name="theme-color" content="#101F2E">
+    <title>Daniel Wambua | Security Researcher</title>
+    <meta name="description" content="Daniel Wambua's cybersecurity portfolio featuring CTF writeups, bug bounty research, pentesting notes, and open-source security tools.">
+    <meta name="keywords" content="Daniel Wambua, cybersecurity, bug bounty, pentesting, CTF writeups, security researcher, HackTheBox">
+    <meta name="author" content="Daniel Wambua">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="theme-color" content="#0A0612">
 
-        <link rel="canonical" href="https://portfolio.havocx.me/">
+    <link rel="canonical" href="https://portfolio.havocx.me/">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
-        <meta property="og:type" content="website">
-        <meta property="og:title" content="Daniel Wambua | Security Portfolio">
-        <meta property="og:description" content="Security research, CTF writeups, bug bounty notes, and open-source tooling from Daniel Wambua.">
-        <meta property="og:url" content="https://portfolio.havocx.me/">
-        <meta property="og:site_name" content="Daniel Wambua Portfolio">
-        <meta property="og:image" content="https://portfolio.havocx.me/images/project-logo.svg">
-        <meta property="og:image:secure_url" content="https://portfolio.havocx.me/images/project-logo.svg">
-        <meta property="og:image:type" content="image/svg+xml">
-        <meta property="og:image:width" content="1200">
-        <meta property="og:image:height" content="320">
-        <meta property="og:image:alt" content="HavocSec portfolio logo banner">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Daniel Wambua | Security Portfolio">
+    <meta property="og:description" content="Security research, CTF writeups, bug bounty notes, and open-source tooling from Daniel Wambua.">
+    <meta property="og:url" content="https://portfolio.havocx.me/">
+    <meta property="og:site_name" content="Daniel Wambua Portfolio">
+    <meta property="og:image" content="https://portfolio.havocx.me/images/project-logo.svg">
+    <meta property="og:image:secure_url" content="https://portfolio.havocx.me/images/project-logo.svg">
+    <meta property="og:image:type" content="image/svg+xml">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="320">
+    <meta property="og:image:alt" content="HavocSec portfolio logo banner">
 
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="Daniel Wambua | Security Portfolio">
-        <meta name="twitter:description" content="Security research, CTF writeups, bug bounty notes, and open-source tooling from Daniel Wambua.">
-        <meta name="twitter:image" content="https://portfolio.havocx.me/images/project-logo.svg">
-        <meta name="twitter:image:alt" content="HavocSec portfolio logo banner">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Daniel Wambua | Security Portfolio">
+    <meta name="twitter:description" content="Security research, CTF writeups, bug bounty notes, and open-source tooling from Daniel Wambua.">
+    <meta name="twitter:image" content="https://portfolio.havocx.me/images/project-logo.svg">
+    <meta name="twitter:image:alt" content="HavocSec portfolio logo banner">
 
-        <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "name": "Daniel Wambua Portfolio",
-            "url": "https://portfolio.havocx.me/",
-            "description": "Cybersecurity portfolio featuring CTF writeups, pentesting notes, and bug bounty research.",
-            "publisher": {
-                "@type": "Person",
-                "name": "Daniel Wambua",
-                "url": "https://danielwambua.dev"
-            }
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Daniel Wambua Portfolio",
+        "url": "https://portfolio.havocx.me/",
+        "description": "Cybersecurity portfolio featuring CTF writeups, pentesting notes, and bug bounty research.",
+        "publisher": {
+            "@type": "Person",
+            "name": "Daniel Wambua",
+            "url": "https://danielwambua.dev"
         }
-        </script>
+    }
+    </script>
 
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/animation.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.havocsec.dev">
+    <link rel="dns-prefetch" href="https://api.github.com">
+    <link rel="dns-prefetch" href="https://www.hackthebox.eu">
+
+    <link rel="preload" as="image" type="image/webp"
+          href="images/profile-300.webp"
+          imagesrcset="images/profile-300.webp 1x, images/profile-600.webp 2x"
+          fetchpriority="high">
+
+    <!-- ?v= is a cache key, not decoration: vercel.json serves /css/ and /js/ with
+         `immutable, max-age=31536000`, so a returning visitor would otherwise pair
+         this HTML with last year's stylesheets. Bump v on every asset change. -->
+    <link rel="stylesheet" href="css/themes.css?v=2">
+    <link rel="stylesheet" href="css/style.css?v=2">
+    <link rel="stylesheet" href="css/animation.css?v=2">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@600;700;800&display=swap">
+
+    <script src="js/script.js?v=2" defer></script>
+    <script src="js/animation.js?v=2" defer></script>
 </head>
 
 <body class="theme-dark-amethyst">
-    <div id="particles-js"></div>
-    <div class="theme-switcher-container"><button id="theme-switcher" aria-label="Switch Theme">🌗</button></div>
-    <div class="content-layout">
-        <main class="content-scroll">
-            <section class="hero"><img src="images/profile.png" alt="Profile Photo" />
-                <div class="hero-name">
-                    <h1>Daniel Wambua</h1>
-                    <p class="intro">I'm a security researcher, CTF player  and bug bounty hunter focused on finding real-world web and API vulnerabilities. I hunt bugs on live targets, break down complex flaws through hands-on analysis, and document my work through clear technical write-ups. You can find them here: <a href="https://havocsec.dev" target="_blank" rel="noopener noreferrer">havocsec.dev</a></p>
-                    <a href="https://danielwambua.dev/downloads/Daniel-Wambua-CV.pdf" class="btn-cv" download>
-                        <span class="btn-cv-icon">📄</span>
-                        <span class="btn-cv-text">Download CV</span>
-                        <span class="btn-cv-arrow">↓</span>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <!-- Pure-CSS backdrop. Replaces the old particles.js canvas: no JS, no
+         requestAnimationFrame loop, and the browser can composite it on the GPU. -->
+    <div class="backdrop" aria-hidden="true">
+        <span class="backdrop-glow backdrop-glow-a"></span>
+        <span class="backdrop-glow backdrop-glow-b"></span>
+        <span class="backdrop-grid"></span>
+    </div>
+
+    <header class="site-header">
+        <div class="shell site-header-inner">
+            <a class="brand" href="#main">
+                <span class="brand-mark" aria-hidden="true">&lt;/&gt;</span>
+                <span class="brand-text">havoc<span class="brand-accent">sec</span></span>
+            </a>
+            <nav class="site-nav" aria-label="Primary">
+                <a href="#about">About</a>
+                <a href="#projects">Work</a>
+                <a href="#highlights">Stats</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            <button id="theme-switcher" type="button" aria-label="Switch colour theme">🌗</button>
+        </div>
+    </header>
+
+    <main id="main">
+        <section class="hero shell">
+            <div class="hero-copy">
+                <p class="eyebrow">
+                    <span class="status-dot" aria-hidden="true"></span>
+                    Security researcher &middot; Bug bounty hunter
+                </p>
+                <h1>Daniel&nbsp;Wambua</h1>
+                <p class="lede">
+                    I break web and API targets for a living and write up what I find. Bug bounty on
+                    live scope, CTFs for reps, and hands-on analysis of the flaws in between,
+                    documented in full at
+                    <a href="https://havocsec.dev" target="_blank" rel="noopener noreferrer">havocsec.dev</a>.
+                </p>
+                <div class="hero-actions">
+                    <a href="https://danielwambua.dev/downloads/Daniel-Wambua-CV.pdf" class="btn btn-primary" download>
+                        <span aria-hidden="true">📄</span> Download CV
                     </a>
+                    <a href="#projects" class="btn btn-ghost">See recent work</a>
                 </div>
-            </section>
-            <div class="tags-container">
+                <ul class="hero-facts">
+                    <li><strong>Offensive</strong> security focus</li>
+                    <li><strong>HackerOne</strong> &amp; Bugcrowd</li>
+                    <li><strong>OWASP</strong> web + API</li>
+                </ul>
+            </div>
+            <div class="hero-portrait">
+                <picture>
+                    <source type="image/webp"
+                            srcset="images/profile-300.webp 1x, images/profile-600.webp 2x">
+                    <img src="images/profile-300.jpg"
+                         srcset="images/profile-300.jpg 1x, images/profile-600.jpg 2x"
+                         width="300" height="300"
+                         fetchpriority="high" decoding="async"
+                         alt="Daniel Wambua" />
+                </picture>
+            </div>
+        </section>
+
+        <section class="shell section" id="about">
+            <header class="section-head">
+                <h2>About</h2>
+                <p class="section-sub">Why the focus is narrow on purpose.</p>
+            </header>
+            <div class="panel prose">
+                <p>I'm a <b>cybersecurity student</b> and self-driven <b>security researcher</b> with a
+                   strong focus on learning by breaking. I spend most of my time practicing offensive
+                   security through bug bounty programs, CTF challenges, and hands-on labs rather than
+                   passive learning.</p>
+                <p>I've consciously decided to stop bouncing between roles and disciplines.
+                   <b>Cybersecurity is the core.</b> Development is a supporting weapon, not the
+                   destination. This clarity lets me compound skills faster and avoid the trap of being
+                   "almost good" at many things and excellent at none.</p>
+                <p>I document what I learn, analyze failures honestly, and iterate aggressively. My
+                   long-term objective is to become a <b>high-impact bug bounty hunter</b> and security
+                   researcher whose work speaks through <i>findings</i>, <i>write-ups</i>, and
+                   <i>tools</i>, not buzzwords.</p>
+                <p class="callout">
+                    <strong>This is the brief portfolio.</strong> For the full depth, visit the unbriefed
+                    one &rarr; <a href="https://danielwambua.dev" target="_blank" rel="noopener noreferrer">danielwambua.dev</a>
+                </p>
+            </div>
+        </section>
+
+        <section class="shell section" id="projects">
+            <header class="section-head">
+                <h2>Work</h2>
+                <p class="section-sub">Latest writeups pulled live from the blog, plus open-source tooling.</p>
+            </header>
+
+            <div class="tags-container" role="group" aria-label="Filter work by topic">
                 <button class="tag active" data-tag="all">All</button>
                 <button class="tag" data-tag="ctf">🚩 CTF</button>
                 <button class="tag" data-tag="pentesting">🔓 Pentesting</button>
@@ -83,95 +184,93 @@
                 <button class="tag" data-tag="postman">📮 Postman</button>
                 <button class="tag" data-tag="linux">🐧 Linux OS</button>
             </div>
-            <section class="content-box">
-                <section class="about animate-card" id="about">
-                    <h2>About me</h2>
-                    <p class="decore">I'm a <b>cybersecurity student</b> and self-driven <b>security researcher</b> with a strong focus on learning by breaking. I spend most of my time practicing offensive security through bug bounty programs, CTF challenges, and hands-on labs rather than passive learning.<br><br>
-                        I've consciously decided to stop bouncing between roles and disciplines. <b>Cybersecurity is the core</b>. Development is a supporting weapon, not the destination. This clarity lets me compound skills faster and avoid the trap of being "almost good" at many things and excellent at none.<br><br>
-                        I document what I learn, analyze failures honestly, and iterate aggressively. My long-term objective is to become a <b>high-impact bug bounty hunter</b> and security researcher whose work speaks through <i>findings</i>, <i>write-ups</i>, and <i>tools</i> - not buzzwords.</p>
-                    <div class="portfolio-cta">
-                        <p>📌 <strong>This is the brief portfolio.</strong> For deep depth and full info, visit the unbriefed one → <a href="https://danielwambua.dev" target="_blank" rel="noopener noreferrer">danielwambua.dev</a></p>
-                    </div>
-                </section>
-                <section class="projects" id="projects">
-                    <h2> Projects</h2>
-                    <div class="project-list" id="rss-projects">
-                        <!-- Projects loaded dynamically from RSS feed -->
-                        <div class="loading-placeholder">
-                            <p>Loading latest posts from havocsec.dev...</p>
-                        </div>
-                    </div>
-                </section>
-                <section class="highlights" id="highlights">
-                    <h2>Highlights</h2>
-                    <div class="highlights-grid">
-                        <div class="highlight-card htb-card">
-                            <div class="highlight-content htb-content">
-                                <h4>🎯 HackTheBox</h4>
-                                <a href="https://app.hackthebox.com/profile/2081158" target="_blank" rel="noopener noreferrer">
-                                    <img src="https://www.hackthebox.eu/badge/image/2081158" alt="HackTheBox Profile" class="htb-badge" />
-                                </a>
-                            </div>
-                        </div>
-                        <div class="highlight-card">
-                            <div class="highlight-icon">💻</div>
-                            <div class="highlight-content">
-                                <h4>GitHub Activity</h4>
-                                <p class="stat-number" id="github-contributions">Loading...</p>
-                                <p class="stat-label">contributions this year</p>
-                            </div>
-                        </div>
-                        <div class="highlight-card">
-                            <div class="highlight-icon">🔓</div>
-                            <div class="highlight-content">
-                                <h4>Bug Bounty</h4>
-                                <p class="stat-label">Active hunter on</p>
-                                <p class="platforms">
-                                    <a href="https://hackerone.com" target="_blank" rel="noopener noreferrer">HackerOne</a> • 
-                                    <a href="https://bugcrowd.com" target="_blank" rel="noopener noreferrer">Bugcrowd</a>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="highlight-card">
-                            <div class="highlight-icon">📦</div>
-                            <div class="highlight-content">
-                                <h4>Open Source</h4>
-                                <p class="stat-number" id="github-repos">Loading...</p>
-                                <p class="stat-label">public repositories</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <section class="contact" id="contact">
-                    <h2>Contact</h2>
-                    <div class="contact-box">
-                        <div class="contact-left">
-                            <p class="email">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                                <a href="mailto:richiehavoc@proton.me">richiehavoc@proton.me</a>
-                            </p>
-                        </div>
-                        <div class="contact-right">
-                            <a href="https://wa.link/havoc" target="_blank" rel="noopener noreferrer" class="whatsapp-btn">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                                WhatsApp Me
-                            </a>
-                            <div class="social-links">
-                                <a href="https://github.com/Daniel-wambua" aria-label="GitHub" class="social-icon" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
-                                <a href="https://www.linkedin.com/in/daniel-wambua-a312b32b8/" aria-label="LinkedIn" class="social-icon" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="28" height="28" viewBox="0 0 30 30"><path d="M24,4H6C4.895,4,4,4.895,4,6v18c0,1.105,0.895,2,2,2h18c1.105,0,2-0.895,2-2V6C26,4.895,25.105,4,24,4z M10.954,22h-2.95 v-9.492h2.95V22z M9.449,11.151c-0.951,0-1.72-0.771-1.72-1.72c0-0.949,0.77-1.719,1.72-1.719c0.948,0,1.719,0.771,1.719,1.719 C11.168,10.38,10.397,11.151,9.449,11.151z M22.004,22h-2.948v-4.616c0-1.101-0.02-2.517-1.533-2.517 c-1.535,0-1.771,1.199-1.771,2.437V22h-2.948v-9.492h2.83v1.297h0.04c0.394-0.746,1.356-1.533,2.791-1.533 c2.987,0,3.539,1.966,3.539,4.522V22z"></path></svg></a>
-                                <a href="https://x.com/HavocRichie" aria-label="X" class="social-icon" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="28" height="28" viewBox="0 0 50 50"><path d="M 5.9199219 6 L 20.582031 27.375 L 6.2304688 44 L 9.4101562 44 L 21.986328 29.421875 L 31.986328 44 L 44 44 L 28.681641 21.669922 L 42.199219 6 L 39.029297 6 L 27.275391 19.617188 L 17.933594 6 L 5.9199219 6 z M 9.7167969 8 L 16.880859 8 L 40.203125 42 L 33.039062 42 L 9.7167969 8 z"></path></svg></a>
-                                <a href="https://www.tiktok.com/@richie_havoc?_t=ZM-90NlaOOLlKV&_r=1" aria-label="TikTok" class="social-icon" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg></a>
-                                <a href="https://havocsec.dev" aria-label="Blog" class="social-icon" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></a>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </section>
-        </main>
-    </div>
-    <script src="js/script.js"></script>
-    <script src="js/particles.js"></script>
-    <script src="js/animation.js"></script>
+
+            <div class="project-list" id="rss-projects">
+                <!-- Populated from the havocsec.dev RSS feed + the GitHub API -->
+                <div class="loading-placeholder">
+                    <p>Loading latest posts from havocsec.dev&hellip;</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="shell section" id="highlights">
+            <header class="section-head">
+                <h2>Stats</h2>
+                <p class="section-sub">Live numbers, not claims.</p>
+            </header>
+            <div class="highlights-grid">
+                <div class="highlight-card htb-card">
+                    <h3>🎯 HackTheBox</h3>
+                    <a href="https://app.hackthebox.com/profile/2081158" target="_blank" rel="noopener noreferrer">
+                        <img src="https://www.hackthebox.eu/badge/image/2081158"
+                             alt="HackTheBox profile badge" class="htb-badge"
+                             width="500" height="94" loading="lazy" decoding="async" />
+                    </a>
+                </div>
+                <div class="highlight-card">
+                    <span class="highlight-icon" aria-hidden="true">💻</span>
+                    <h3>GitHub Activity</h3>
+                    <p class="stat-number" id="github-contributions">&hellip;</p>
+                    <p class="stat-label">contributions this year</p>
+                </div>
+                <div class="highlight-card">
+                    <span class="highlight-icon" aria-hidden="true">📦</span>
+                    <h3>Open Source</h3>
+                    <p class="stat-number" id="github-repos">&hellip;</p>
+                    <p class="stat-label">public repositories</p>
+                </div>
+                <div class="highlight-card">
+                    <span class="highlight-icon" aria-hidden="true">🔓</span>
+                    <h3>Bug Bounty</h3>
+                    <p class="stat-label">Active hunter on</p>
+                    <p class="platforms">
+                        <a href="https://hackerone.com" target="_blank" rel="noopener noreferrer">HackerOne</a>
+                        <span aria-hidden="true">&middot;</span>
+                        <a href="https://bugcrowd.com" target="_blank" rel="noopener noreferrer">Bugcrowd</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="shell section" id="contact">
+            <header class="section-head">
+                <h2>Contact</h2>
+                <p class="section-sub">Reports, collabs, or a good target. Reach out.</p>
+            </header>
+            <div class="panel contact-panel">
+                <div class="contact-primary">
+                    <a class="contact-line" href="mailto:richiehavoc@proton.me">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        richiehavoc@proton.me
+                    </a>
+                    <a href="https://wa.link/havoc" target="_blank" rel="noopener noreferrer" class="whatsapp-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        WhatsApp me
+                    </a>
+                </div>
+                <div class="social-links">
+                    <a href="https://github.com/Daniel-wambua" aria-label="GitHub" class="social-icon" target="_blank" rel="noopener noreferrer"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                    <a href="https://www.linkedin.com/in/daniel-wambua-a312b32b8/" aria-label="LinkedIn" class="social-icon" target="_blank" rel="noopener noreferrer"><svg width="22" height="22" viewBox="0 0 30 30" fill="currentColor" aria-hidden="true"><path d="M24,4H6C4.895,4,4,4.895,4,6v18c0,1.105,0.895,2,2,2h18c1.105,0,2-0.895,2-2V6C26,4.895,25.105,4,24,4z M10.954,22h-2.95 v-9.492h2.95V22z M9.449,11.151c-0.951,0-1.72-0.771-1.72-1.72c0-0.949,0.77-1.719,1.72-1.719c0.948,0,1.719,0.771,1.719,1.719 C11.168,10.38,10.397,11.151,9.449,11.151z M22.004,22h-2.948v-4.616c0-1.101-0.02-2.517-1.533-2.517 c-1.535,0-1.771,1.199-1.771,2.437V22h-2.948v-9.492h2.83v1.297h0.04c0.394-0.746,1.356-1.533,2.791-1.533 c2.987,0,3.539,1.966,3.539,4.522V22z"></path></svg></a>
+                    <a href="https://x.com/HavocRichie" aria-label="X" class="social-icon" target="_blank" rel="noopener noreferrer"><svg width="22" height="22" viewBox="0 0 50 50" fill="currentColor" aria-hidden="true"><path d="M 5.9199219 6 L 20.582031 27.375 L 6.2304688 44 L 9.4101562 44 L 21.986328 29.421875 L 31.986328 44 L 44 44 L 28.681641 21.669922 L 42.199219 6 L 39.029297 6 L 27.275391 19.617188 L 17.933594 6 L 5.9199219 6 z M 9.7167969 8 L 16.880859 8 L 40.203125 42 L 33.039062 42 L 9.7167969 8 z"></path></svg></a>
+                    <a href="https://www.tiktok.com/@richie_havoc?_t=ZM-90NlaOOLlKV&amp;_r=1" aria-label="TikTok" class="social-icon" target="_blank" rel="noopener noreferrer"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg></a>
+                    <a href="https://havocsec.dev" aria-label="Blog" class="social-icon" target="_blank" rel="noopener noreferrer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></a>
+                    <!-- guns.lol ships no brand SVG, so the logo stays a raster. It is
+                         applied as a mask and painted with currentColor rather than
+                         dropped in as an <img>: the artwork is near-white, which would
+                         vanish on the arctic-frost and golden-haze themes. Masking also
+                         cut it from 84 KB to 4.5 KB. -->
+                    <a href="https://guns.lol/0xhavoc" aria-label="guns.lol" title="guns.lol" class="social-icon" target="_blank" rel="noopener noreferrer"><span class="icon-guns" aria-hidden="true"></span></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="shell site-footer-inner">
+            <p>&copy; <span id="year">2026</span> Daniel Wambua</p>
+            <p><a href="https://havocsec.dev" target="_blank" rel="noopener noreferrer">havocsec.dev</a></p>
+        </div>
+    </footer>
 </body>
 
 </html>

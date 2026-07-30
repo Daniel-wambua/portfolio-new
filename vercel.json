@@ -2,12 +2,6 @@
   "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
-  "rewrites": [
-    {
-      "source": "/rss.xml",
-      "destination": "https://www.havocsec.dev/rss.xml"
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",

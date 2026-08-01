@@ -32,6 +32,72 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Mobile nav toggle.
+//
+// The panel is the same <nav> the desktop layout uses, restyled below 860px
+// (see the max-width:860px block in style.css) — there is one set of links in
+// the DOM, not a duplicate mobile menu. This only drives state: `aria-expanded`
+// on the button for assistive tech, and `data-open` on the nav for the CSS to
+// animate max-height against. No visibility is set from here.
+document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('nav-toggle');
+    const nav = document.getElementById('site-nav');
+    const scrim = document.getElementById('nav-scrim');
+    if (!toggle || !nav) return;
+
+    function setNavOpen(open) {
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        if (open) {
+            nav.setAttribute('data-open', 'true');
+            document.body.setAttribute('data-nav-open', 'true');
+            if (scrim) scrim.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        } else {
+            nav.removeAttribute('data-open');
+            document.body.removeAttribute('data-nav-open');
+            if (scrim) scrim.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+    }
+
+    function isNavOpen() {
+        return toggle.getAttribute('aria-expanded') === 'true';
+    }
+
+    toggle.addEventListener('click', () => setNavOpen(!isNavOpen()));
+
+    // Same-page anchors do not reload, so the drawer would otherwise stay open
+    // over the section the visitor just jumped to.
+    nav.addEventListener('click', event => {
+        if (event.target.closest('a')) setNavOpen(false);
+    });
+
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && isNavOpen()) {
+            setNavOpen(false);
+            // Focus would otherwise be left on whatever link the visitor had
+            // tabbed to inside a now-hidden drawer.
+            toggle.focus();
+        }
+    });
+
+    // Covers the scrim as well as the page behind it: neither matches these
+    // selectors, so a tap anywhere outside the drawer closes it.
+    document.addEventListener('click', event => {
+        if (!isNavOpen()) return;
+        if (!event.target.closest('#site-nav, #nav-toggle')) setNavOpen(false);
+    });
+
+    // Crossing into the desktop layout leaves the button display:none while
+    // the drawer is still flagged open, so the state is stale if the visitor
+    // rotates back to portrait — and the scroll lock would stay applied.
+    const wide = window.matchMedia('(min-width: 861px)');
+    wide.addEventListener('change', event => {
+        if (event.matches) setNavOpen(false);
+    });
+});
+
 // RSS Feed Configuration
 // NOTE: the `www` host is required. The apex host (havocsec.dev) answers with a
 // 308 redirect that carries no Access-Control-Allow-Origin header, and browsers

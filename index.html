@@ -61,14 +61,13 @@
     <!-- ?v= is a cache key, not decoration: vercel.json serves /css/ and /js/ with
          `immutable, max-age=31536000`, so a returning visitor would otherwise pair
          this HTML with last year's stylesheets. Bump v on every asset change. -->
-    <link rel="stylesheet" href="css/themes.css?v=2">
-    <link rel="stylesheet" href="css/style.css?v=2">
-    <link rel="stylesheet" href="css/animation.css?v=2">
+    <link rel="stylesheet" href="css/themes.css?v=4">
+    <link rel="stylesheet" href="css/style.css?v=4">
+    <link rel="stylesheet" href="css/animation.css?v=4">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@600;700;800&display=swap">
 
-    <script src="js/script.js?v=2" defer></script>
-    <script src="js/animation.js?v=2" defer></script>
+    <script src="js/script.js?v=4" defer></script>
 </head>
 
 <body class="theme-dark-amethyst">
@@ -88,15 +87,27 @@
                 <span class="brand-mark" aria-hidden="true">&lt;/&gt;</span>
                 <span class="brand-text">havoc<span class="brand-accent">sec</span></span>
             </a>
-            <nav class="site-nav" aria-label="Primary">
+            <nav class="site-nav" id="site-nav" aria-label="Primary">
                 <a href="#about">About</a>
                 <a href="#projects">Work</a>
                 <a href="#highlights">Stats</a>
                 <a href="#contact">Contact</a>
             </nav>
             <button id="theme-switcher" type="button" aria-label="Switch colour theme">🌗</button>
+            <!-- Only rendered below 860px, where .site-nav collapses into the
+                 right-side drawer this button controls. Hidden from the a11y
+                 tree on desktop via `display:none`, so the nav stays a plain
+                 list of links there with no toggle semantics attached. -->
+            <button id="nav-toggle" type="button" class="nav-toggle"
+                    aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
+                <span class="nav-toggle-bars" aria-hidden="true"></span>
+            </button>
         </div>
     </header>
+
+    <!-- Dims the page behind the mobile drawer. Click-to-close is bound in
+         script.js alongside the outside-click handler. -->
+    <div class="nav-scrim" id="nav-scrim" aria-hidden="true"></div>
 
     <main id="main">
         <section class="hero shell">
@@ -105,7 +116,7 @@
                     <span class="status-dot" aria-hidden="true"></span>
                     Security researcher &middot; Bug bounty hunter
                 </p>
-                <h1>Daniel&nbsp;Wambua</h1>
+                <h1>Daniel Wambua</h1>
                 <p class="lede">
                     I break web and API targets for a living and write up what I find. Bug bounty on
                     live scope, CTFs for reps, and hands-on analysis of the flaws in between,

@@ -10,12 +10,18 @@
 
 html {
     scroll-behavior: smooth;
-    -webkit-text-size-adjust: 100%
+    -webkit-text-size-adjust: 100%;
+    /* The header is sticky and 62px tall, so an un-offset anchor jump parks the
+       target's heading underneath it. Keeps section titles visible on arrival. */
+    scroll-padding-top: 78px
 }
 
 body {
     margin: 0;
     min-height: 100vh;
+    /* dvh tracks the collapsing mobile URL bar; the 100vh above stays as the
+       fallback for browsers without dvh support. */
+    min-height: 100dvh;
     font-family: 'Inter', Arial, sans-serif;
     font-size: 1rem;
     line-height: 1.6;
@@ -23,6 +29,13 @@ body {
     background-attachment: fixed;
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased
+}
+
+/* The default grey/blue flash fires on every tap including scroll-initiating
+   ones. Interactive elements below define their own :active feedback. */
+a,
+button {
+    -webkit-tap-highlight-color: transparent
 }
 
 h1,
@@ -130,7 +143,10 @@ a:hover {
 }
 
 .section {
-    padding: 4.5rem 1.5rem
+    padding: 4.5rem 1.5rem;
+    /* Belt-and-braces with html{scroll-padding-top}: Safari has historically
+       been unreliable about scroll-padding on the scrolling element. */
+    scroll-margin-top: 78px
 }
 
 .section-head {
@@ -189,6 +205,9 @@ a:hover {
     display: inline-flex;
     align-items: center;
     gap: .6rem;
+    /* Standalone target rather than a link inside a sentence, so it gets the
+       full 44px hit box; the text itself is only ~27px tall. */
+    min-height: 44px;
     font-family: 'Nunito', 'Inter', sans-serif;
     font-weight: 800;
     font-size: 1.05rem;
@@ -226,8 +245,8 @@ a:hover {
 
 #theme-switcher {
     flex-shrink: 0;
-    width: 38px;
-    height: 38px;
+    width: 44px;
+    height: 44px;
     display: grid;
     place-items: center;
     font-size: 1.1rem;
@@ -242,6 +261,87 @@ a:hover {
 #theme-switcher:hover {
     transform: rotate(20deg);
     border-color: var(--accent-primary)
+}
+
+/* ========== Nav toggle (mobile only) ==================================== */
+
+/* Desktop hides this outright so it leaves the a11y tree entirely: the full
+   nav is visible there and a collapsed-menu control would be a lie to AT. */
+.nav-toggle {
+    display: none;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    cursor: pointer;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px
+}
+
+/* The bars are one element plus two pseudos, so the whole glyph animates into
+   an X with transforms alone: no width/height changes, nothing that reflows. */
+.nav-toggle-bars,
+.nav-toggle-bars::before,
+.nav-toggle-bars::after {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform .25s ease, opacity .2s ease
+}
+
+/* Anchors the two absolutely positioned bars to this element rather than to
+   the sticky header, which is the next positioned ancestor. */
+.nav-toggle-bars {
+    position: relative
+}
+
+.nav-toggle-bars::before,
+.nav-toggle-bars::after {
+    content: "";
+    position: absolute
+}
+
+.nav-toggle-bars::before {
+    transform: translateY(-6px)
+}
+
+.nav-toggle-bars::after {
+    transform: translateY(6px)
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars {
+    /* Middle bar vanishes; the outer two rotate through each other into an X. */
+    background: transparent
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars::before {
+    transform: translateY(0) rotate(45deg)
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars::after {
+    transform: translateY(0) rotate(-45deg)
+}
+
+/* Dimmer behind the mobile drawer. Lives outside the header so it can cover
+   the page without fighting the header's own stacking context; kept at
+   opacity 0 / pointer-events:none on desktop where the drawer never opens. */
+.nav-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(0, 0, 0, .55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .28s ease
+}
+
+body[data-nav-open="true"] .nav-scrim {
+    opacity: 1;
+    pointer-events: auto
 }
 
 /* ========== Hero ======================================================== */
@@ -280,7 +380,9 @@ a:hover {
 
 .hero h1 {
     margin: 1.1rem 0 0;
-    font-size: clamp(2.4rem, 6.5vw, 3.9rem);
+    /* Floor lowered from 2.4rem: at 320px the old floor left "Daniel Wambua"
+       filling nearly the whole line box with no room to wrap gracefully. */
+    font-size: clamp(2.1rem, 7vw, 3.9rem);
     letter-spacing: -.02em;
     background: var(--btn-gradient);
     -webkit-background-clip: text;
@@ -348,7 +450,9 @@ a:hover {
 .btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: .5rem;
+    min-height: 44px;
     padding: .7rem 1.35rem;
     font-size: .92rem;
     font-weight: 600;
@@ -367,6 +471,10 @@ a:hover {
     color: var(--text-primary)
 }
 
+.btn:active {
+    transform: scale(.97)
+}
+
 .btn-primary {
     background: var(--btn-gradient);
     border-color: transparent;
@@ -377,6 +485,10 @@ a:hover {
     background: var(--btn-gradient-hover);
     color: #fff;
     box-shadow: 0 10px 26px var(--glow-color)
+}
+
+.btn-primary:active {
+    transform: scale(.97)
 }
 
 .btn-ghost {
@@ -423,7 +535,12 @@ a:hover {
 }
 
 .tag {
-    padding: .45rem .9rem;
+    /* min-height rather than taller padding: the pill keeps its compact look
+       while the hit box reaches the 44px touch minimum. */
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: .45rem 1rem;
     font-family: inherit;
     font-size: .82rem;
     font-weight: 600;
@@ -720,8 +837,12 @@ a:hover {
     display: inline-flex;
     align-items: center;
     gap: .55rem;
+    min-height: 44px;
     font-size: .95rem;
-    color: var(--text-primary)
+    color: var(--text-primary);
+    /* The address is a single long token; without this it overflows the panel
+       on a 320px screen rather than wrapping. */
+    overflow-wrap: anywhere
 }
 
 .contact-line svg {
@@ -735,7 +856,9 @@ a:hover {
 .whatsapp-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: .5rem;
+    min-height: 44px;
     padding: .6rem 1.1rem;
     font-size: .88rem;
     color: #fff;
@@ -755,8 +878,8 @@ a:hover {
 }
 
 .social-icon {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     display: grid;
     place-items: center;
     color: var(--text-secondary);
@@ -814,21 +937,60 @@ a:hover {
     .hero {
         grid-template-columns: 1fr;
         text-align: left;
-        padding-top: 3.5rem;
-        gap: 2rem
+        padding-top: 2.5rem;
+        padding-bottom: 3rem;
+        gap: 2.25rem
+    }
+
+    /* The pill wraps to two lines at phone widths and pushes the name down for
+       something the lede already says. Hidden below 860px; still read on
+       desktop where it fits on one line. */
+    .eyebrow {
+        display: none
+    }
+
+    /* Portrait follows the copy in source order, and on mobile it stays there:
+       leading with a 190px face pushed the name and the pitch below the fold.
+       Text first, face as the closer. The children carry their own margins, so
+       the rhythm is tightened here rather than with a flex gap, which would
+       stack on top of them. */
+    .hero h1 {
+        /* The pill above it is gone, so the hero padding sets the top gap. */
+        margin-top: 0
+    }
+
+    .hero .lede {
+        margin-top: .85rem
+    }
+
+    .hero-actions {
+        margin-top: 1.4rem
+    }
+
+    .hero-facts {
+        gap: .4rem 1.2rem;
+        margin-top: 1.4rem
     }
 
     .hero-portrait {
-        order: -1
+        /* Centred in the column rather than left-aligned under the copy, which
+           left a lopsided gap on the right at every phone width. */
+        justify-self: center
     }
 
     .hero-portrait img {
-        width: 190px;
-        height: 190px
+        width: 200px;
+        height: 200px;
+        border-radius: 20px
     }
 
-    .site-nav {
-        display: none
+    /* A 24px blur on a -14px inset spills past the viewport edge and, at
+       z-index:-1, paints behind the page background instead of around the
+       photo. Tighter and dimmer keeps it a rim rather than a smear. */
+    .hero-portrait::after {
+        inset: -8px;
+        filter: blur(16px);
+        opacity: .14
     }
 
     .brand {
@@ -841,6 +1003,142 @@ a:hover {
 
     .htb-card {
         grid-column: auto
+    }
+
+    /* ----- Collapsed nav ------------------------------------------------ */
+
+    .nav-toggle {
+        display: grid;
+        order: 3
+    }
+
+    /* backdrop-filter makes an element a containing block for position:fixed
+       descendants, which would resolve the drawer against this 62px bar
+       instead of the viewport — it would render as a sliver under the header.
+       Dropping the blur restores viewport-relative positioning; the opaque
+       card background replaces what the blur was buying, and the header loses
+       a compositor layer on the way. */
+    .site-header {
+        background: var(--bg-dark-card);
+        backdrop-filter: none
+    }
+
+    /* The same <nav> as desktop, re-flowed into a drawer pinned to the right
+       edge. `fixed` takes it out of the header's flex row entirely, so the bar
+       keeps its 62px height whether the drawer is open or shut. It sits below
+       the header (top:62px) so the toggle stays visible and tappable while
+       open — closing is never a hunt for a hidden X. */
+    .site-nav {
+        display: flex;
+        position: fixed;
+        top: 62px;
+        right: 0;
+        z-index: 45;
+        flex-direction: column;
+        gap: 0;
+        width: min(78vw, 300px);
+        height: calc(100dvh - 62px);
+        margin-left: 0;
+        padding: .5rem 1.5rem 2rem;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        /* --bg-secondary is 0.62 alpha and would let the page text read
+           straight through the drawer. --bg-dark-card is 0.95, and stacking it
+           as its own image over itself compounds to ~0.9975 — opaque in
+           practice, still theme-aware, and no new token needed. The blur is
+           insurance for the remainder. */
+        background-color: var(--bg-dark-card);
+        background-image: linear-gradient(var(--bg-dark-card), var(--bg-dark-card));
+        backdrop-filter: blur(14px);
+        border-left: 1px solid var(--border-color);
+        box-shadow: -18px 0 50px var(--shadow-color);
+        font-size: 1rem;
+        /* translate, not width/right: the drawer slides on the compositor with
+           no layout work per frame. */
+        transform: translateX(100%);
+        /* The panel is off-screen but still focusable without this, so a Tab
+           press would move focus into a drawer the visitor cannot see.
+           Delayed on close so the slide-out stays visible; instant on open. */
+        visibility: hidden;
+        transition: transform .28s ease, visibility 0s linear .28s
+    }
+
+    .site-nav[data-open="true"] {
+        transform: translateX(0);
+        visibility: visible;
+        transition: transform .28s ease, visibility 0s
+    }
+
+    .site-nav a {
+        display: flex;
+        align-items: center;
+        min-height: 48px;
+        padding: 0 .25rem;
+        border-bottom: 1px solid var(--border-color)
+    }
+
+    /* Drawer is position:fixed, so the bar never has to grow to fit it. */
+    .site-header-inner {
+        height: 62px
+    }
+
+    /* ----- Backdrop trim ------------------------------------------------ */
+
+    /* `fixed` makes iOS Safari repaint the full-page gradient on every scroll
+       frame. `scroll` lets it composite normally. */
+    body {
+        background-attachment: scroll
+    }
+
+    /* Halved radius and footprint: an 80px blur over a 60vmax box is a large
+       offscreen buffer for a mobile GPU, and at this size the difference is
+       not perceptible. */
+    .backdrop-glow {
+        width: 30vmax;
+        height: 30vmax;
+        filter: blur(40px)
+    }
+
+    .backdrop-glow-a {
+        top: -10vmax;
+        left: -8vmax
+    }
+
+    .backdrop-glow-b {
+        bottom: -12vmax;
+        right: -8vmax
+    }
+
+    /* Cards are already 0.9-alpha over the gradient, so the blur behind them
+       costs a compositor layer each to render something nearly invisible. */
+    .panel {
+        backdrop-filter: none
+    }
+
+    /* ----- Work filter -------------------------------------------------- */
+
+    /* 14 filter pills wrap to ~5 rows at this width and push the project list
+       below the fold. A single swipeable row keeps the section scannable. */
+    .tags-container {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scroll-snap-type: x proximity;
+        /* Full-bleed so the strip scrolls edge to edge rather than appearing
+           to be cut off inside the shell's padding. */
+        margin-inline: -1.5rem;
+        padding-inline: 1.5rem;
+        padding-bottom: .5rem;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch
+    }
+
+    .tags-container::-webkit-scrollbar {
+        display: none
+    }
+
+    .tag {
+        flex: 0 0 auto;
+        scroll-snap-align: start
     }
 }
 
@@ -873,6 +1171,25 @@ a:hover {
 
     .backdrop-grid {
         background-size: 40px 40px
+    }
+
+    /* Shell padding drops to 1.1rem here, so the full-bleed offsets set at
+       860px have to follow it or the strip sits inset by the difference. */
+    .tags-container {
+        margin-inline: -1.1rem;
+        padding-inline: 1.1rem
+    }
+
+    /* Stack rather than sit side by side: at this width the two buttons
+       squeeze the email address into an unreadable column. */
+    .contact-primary {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%
+    }
+
+    .contact-primary .contact-line {
+        justify-content: center
     }
 }
 

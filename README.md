@@ -34,7 +34,7 @@ A modern, cyberpunk-themed portfolio showcasing security research, CTF writeups,
 ## 🛠️ Tech Stack
 
 - HTML5 / CSS3 / Vanilla JavaScript
-- [Particles.js](https://vincentgarreau.com/particles.js/) for animated background
+- Pure-CSS animated backdrop (no canvas, no JS render loop)
 - RSS Feed integration for dynamic content
 - GitHub API for repository stats
 - Deployed on Vercel
@@ -50,11 +50,12 @@ A modern, cyberpunk-themed portfolio showcasing security research, CTF writeups,
 │   ├── themes.css      # 12 color themes
 │   └── animation.css   # Animations
 ├── js/
-│   ├── script.js       # Main logic, RSS/GitHub fetch
-│   ├── particles.js    # Particle animation config
-│   └── animation.js    # Scroll animations
+│   └── script.js       # Theme + nav toggle, RSS/GitHub fetch
 └── images/
-    └── profile.png     # Profile photo
+    ├── profile-*.webp  # Profile photo (webp, 1x/2x)
+    ├── profile-*.jpg   # Profile photo fallback
+    ├── guns-mask.webp  # guns.lol icon alpha mask
+    └── project-logo.svg
 ```
 
 ## 🎨 Available Themes

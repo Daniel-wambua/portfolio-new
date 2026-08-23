@@ -102,10 +102,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // NOTE: the `www` host is required. The apex host (havocsec.dev) answers with a
 // 308 redirect that carries no Access-Control-Allow-Origin header, and browsers
 // enforce CORS on the redirect response itself, so the apex URL is unfetchable
-// from the browser. `www.havocsec.dev` serves the feed with ACAO `*`, so it can
+// from the browser. `havocsec.dev` serves the feed with ACAO `*`, so it can
 // be fetched directly and no CORS proxy is needed.
 const RSS_CONFIG = {
-    feedUrl: 'https://www.havocsec.dev/rss.xml',
+    feedUrl: 'https://havocsec.dev/rss.xml',
     // Last-resort mirror, only tried if the direct fetch fails.
     corsProxies: [
         'https://api.allorigins.win/raw?url='
@@ -176,7 +176,7 @@ async function loadProjects() {
             writeupSection.insertAdjacentHTML('beforeend', `
                 <div class="see-more-container">
                     <p class="see-more-text">Find more CTF writeups and pentesting guides here</p>
-                    <a href="https://www.havocsec.dev" class="btn" target="_blank" rel="noopener noreferrer">Visit havocsec.dev →</a>
+                    <a href="https://havocsec.dev" class="btn" target="_blank" rel="noopener noreferrer">Visit havocsec.dev →</a>
                 </div>
             `);
             container.appendChild(writeupSection);
@@ -208,7 +208,7 @@ async function loadProjects() {
                 <div class="error-message">
                     <p>Projects loading slowly? Visit directly:</p>
                     <div class="project-links" style="justify-content: center; margin-top: 1rem;">
-                        <a href="https://www.havocsec.dev" class="btn" target="_blank">havocsec.dev</a>
+                        <a href="https://havocsec.dev" class="btn" target="_blank">havocsec.dev</a>
                         <a href="https://github.com/Daniel-wambua" class="btn" target="_blank">GitHub</a>
                     </div>
                 </div>
@@ -224,7 +224,7 @@ async function loadProjects() {
             <div class="error-message">
                 <p>Unable to load projects. Visit directly:</p>
                 <div class="project-links" style="justify-content: center; margin-top: 1rem;">
-                    <a href="https://www.havocsec.dev" class="btn" target="_blank">havocsec.dev</a>
+                    <a href="https://havocsec.dev" class="btn" target="_blank">havocsec.dev</a>
                     <a href="https://github.com/Daniel-wambua" class="btn" target="_blank">GitHub</a>
                 </div>
             </div>
@@ -355,7 +355,7 @@ function collapseSlashes(url) {
 // The feed emits apex-host URLs, which answer with a 308 to the `www` host.
 // Point straight at `www` so images and links skip that extra round trip.
 function canonicalizeHost(url) {
-    return url.replace(/^https?:\/\/havocsec\.dev/, 'https://www.havocsec.dev');
+    return url.replace(/^https?:\/\/havocsec\.dev/, 'https://havocsec.dev');
 }
 
 function delay(ms) {

@@ -1,115 +1,78 @@
-# 🔐 Daniel Wambua | Security Portfolio
+# HavocSec · Daniel Wambua · Security Researcher
 
-A modern, cyberpunk-themed portfolio showcasing security research, CTF writeups, and open-source tools.
+Personal portfolio for [HavocSec](https://portfolio.havocsec.me), offensive
+security researcher and CTF practitioner. Dark, editorial, deliberately
+restrained: typography, spacing and evidence carry the design.
 
-<p align="center">
-  <img src="images/project-logo.svg" alt="HavocSec Portfolio Logo" width="720" />
-</p>
+**Live:** <https://portfolio.havocsec.me>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Status-Live-19C37D?style=for-the-badge" alt="Status Live" />
-  <img src="https://img.shields.io/badge/License-MIT-3B82F6?style=for-the-badge" alt="MIT License" />
-  <img src="https://img.shields.io/badge/Deployed%20On-Vercel-000000?style=for-the-badge&logo=vercel" alt="Deployed on Vercel" />
-  <img src="https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?style=for-the-badge&logo=javascript&logoColor=111111" alt="Vanilla JavaScript" />
-  <img src="https://img.shields.io/badge/Responsive-Yes-0EA5E9?style=for-the-badge" alt="Responsive" />
-  <img src="https://img.shields.io/badge/Themes-12-8B5CF6?style=for-the-badge" alt="12 Themes" />
-  <img src="https://img.shields.io/badge/RSS%20Feed-Integrated-F97316?style=for-the-badge&logo=rss" alt="RSS Integrated" />
-</p>
+## What's on the page
 
-## ✨ Features
+- **Selected work**: glass cards in a two-column grid with cover images for
+  the tools that run in production (BlackBook, docker-scanner, AIGCForge,
+  cyberhub)
+- **Research & writeups**: a live index of the latest CTF and pentest
+  writeups, pulled from the feed and rendered as matching cards with
+  platform, category, difficulty and feature image
+- **Capabilities**: grounded in published work, not keyword lists
+- **Track record**: bug bounty, seasonal HackTheBox machines, 2026 CTFs
+- **Contact**: one email and a set of profile links
 
-- **12 Cyberpunk Themes** - Neon Tokyo, Dark Amethyst, Matrix Green, Synthwave, and more
-- **Dynamic Content** - Auto-fetches latest CTF writeups from [havocsec.dev](https://havocsec.dev) RSS feed
-- **GitHub Integration** - Displays featured repositories with live stats
-- **HackTheBox Badge** - Live HTB profile stats
-- **Animated Particles** - Interactive particle.js background
-- **Responsive Design** - Works on all devices
-- **Fast Loading** - Optimized with caching headers for Vercel
+## Architecture
 
-## 🚀 Live Demo
-
-- **Brief Portfolio**: [portfolio.havocx.me](https://portfolio.havocx.me)
-- **Full Portfolio**: [danielwambua.dev](https://danielwambua.dev)
-
-## 🛠️ Tech Stack
-
-- HTML5 / CSS3 / Vanilla JavaScript
-- Pure-CSS animated backdrop (no canvas, no JS render loop)
-- RSS Feed integration for dynamic content
-- GitHub API for repository stats
-- Deployed on Vercel
-
-## 📁 Project Structure
+Static HTML/CSS/JS with no build step, deployed on Vercel straight from this
+repository.
 
 ```
-├── index.html          # Main HTML file
-├── vercel.json         # Vercel deployment config
-├── favicon.svg         # Custom cyberpunk favicon
+├── index.html          # the whole site
+├── vercel.json         # deploy config: headers + the /rss.xml rewrite
+├── favicon.svg
+├── robots.txt
+├── sitemap.xml
 ├── css/
-│   ├── style.css       # Main styles
-│   ├── themes.css      # 12 color themes
-│   └── animation.css   # Animations
+│   └── style.css       # single stylesheet, one palette, one accent
 ├── js/
-│   └── script.js       # Theme + nav toggle, RSS/GitHub fetch
+│   └── script.js       # nav drawer, scroll reveal, feed rendering
 └── images/
-    ├── profile-*.webp  # Profile photo (webp, 1x/2x)
-    ├── profile-*.jpg   # Profile photo fallback
-    ├── guns-mask.webp  # guns.lol icon alpha mask
-    └── project-logo.svg
+    ├── og-image.png    # 1200×630 social card
+    ├── profile-*.webp  # portrait, 1x/2x
+    ├── guns-mask.webp  # alpha mask for the guns.lol icon
+    └── projects/       # generated project covers for the work cards
 ```
 
-## 🎨 Available Themes
+## RSS
 
-| Theme | Icon | Vibe |
-|-------|------|------|
-| Neon Tokyo | 🌃 | Pink/Cyan cyberpunk |
-| Dark Amethyst | 🔮 | Purple mystical |
-| Midnight Forest | 🌲 | Green nature |
-| Cyber Blood | 🩸 | Red aggressive |
-| Arctic Frost | ❄️ | Ice blue |
-| Golden Haze | ✨ | Warm amber |
-| Void Purple | 🌌 | Deep space |
-| Ocean Depths | 🌊 | Teal underwater |
-| Sunset Ember | 🌅 | Orange coral |
-| Matrix Green | 💻 | Hacker green |
-| Synthwave | 🎧 | Retro magenta/cyan |
-| Nord Aurora | 🌌 | Soft nordic blue |
+`https://portfolio.havocsec.me/rss.xml` is a **server-side rewrite** (see
+`vercel.json`) to the live feed at `havocsec.dev/rss.xml`, so the portfolio
+serves valid, always-fresh RSS under its own domain with no CORS involved.
+The page announces it via RSS autodiscovery in `<head>`, and the writeup
+index fetches the same same-origin URL. No proxies, no cached snapshots.
 
-## 🔧 Local Development
+## Local development
 
 ```bash
-# Clone the repository
 git clone https://github.com/Daniel-wambua/portfolio-new.git
 cd portfolio-new
-
-# Serve locally (Python)
 python3 -m http.server 8080
-
-# Or use any static server
-npx serve .
 ```
 
-## 🚀 Deploy to Vercel
+Note: locally `/rss.xml` does not exist (the rewrite only runs on Vercel),
+so the writeup index will fall back — and the browser will correctly refuse
+the cross-origin direct fetch. The index renders fully once deployed.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Daniel-wambua/portfolio-new)
+## Contact
 
-Or manually:
-```bash
-npm i -g vercel
-vercel
-```
+- **Blog:** [havocsec.dev](https://havocsec.dev)
+- **GitHub:** [@Daniel-wambua](https://github.com/Daniel-wambua)
+- **HackTheBox:** [profile](https://app.hackthebox.com/profile/2081158)
+- **Email:** hello@havocsec.me
 
-## 📬 Contact
-- **Blog**: [havocsec.dev](https://havocsec.dev)
-- **GitHub**: [@Daniel-wambua](https://github.com/Daniel-wambua)
-- **HackTheBox**: [Profile](https://app.hackthebox.com/profile/2081158)
+## License
 
----
+MIT. See below.
 
 <details>
-<summary><strong>📄 License (Click to expand)</strong></summary>
-
-### MIT License
+<summary><strong>MIT License</strong></summary>
 
 Copyright (c) 2026 Daniel Wambua
 
@@ -132,9 +95,3 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 </details>
-
----
-
-<p align="center">
-  <sub>Built with 💜 by <a href="https://guns/lol/0xhavoc">Daniel Wambua</a></sub>
-</p>

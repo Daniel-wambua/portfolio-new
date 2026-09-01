@@ -1,1209 +1,1145 @@
-/* Fonts and themes.css are loaded via <link> in index.html.
-   Using @import here forced them to download in series: style.css had to be
-   fetched and parsed before the browser even learned the font URL existed. */
+/* ============================================================================
+   HavocSec — portfolio.havocsec.me
+   ----------------------------------------------------------------------------
+   One palette: near-black ground, off-white ink, muted grays, a single red.
+   One idea: typography, rules and spacing carry the design. Effects only
+   where they earn their keep — everything below still works with animations
+   disabled (and prefers-reduced-motion turns the rest off).
+   ========================================================================== */
+
+:root {
+    --bg: #0a0a0b;
+    --bg-raised: #101013;
+    --bg-hover: #131317;
+    --ink: #e8e6e3;
+    --ink-dim: #a2a2ab;
+    --ink-faint: #7d7d87;
+    --line: #232329;
+    --line-strong: #36363e;
+    --accent: #e5484d;
+    --accent-hover: #f0575c;
+
+    --font-sans: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+    --shell: 1200px;
+    --header-h: 64px;
+}
+
+/* ----------------------------------------------------------------- base -- */
 
 *,
 *::before,
 *::after {
-    box-sizing: border-box
+    box-sizing: border-box;
 }
 
 html {
     scroll-behavior: smooth;
-    -webkit-text-size-adjust: 100%;
-    /* The header is sticky and 62px tall, so an un-offset anchor jump parks the
-       target's heading underneath it. Keeps section titles visible on arrival. */
-    scroll-padding-top: 78px
+    scroll-padding-top: calc(var(--header-h) + 24px);
 }
 
 body {
     margin: 0;
-    min-height: 100vh;
-    /* dvh tracks the collapsing mobile URL bar; the 100vh above stays as the
-       fallback for browsers without dvh support. */
-    min-height: 100dvh;
-    font-family: 'Inter', Arial, sans-serif;
-    font-size: 1rem;
-    line-height: 1.6;
-    background: var(--bg-primary);
-    background-attachment: fixed;
-    color: var(--text-primary);
-    -webkit-font-smoothing: antialiased
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 16px/1.65 var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
 
-/* The default grey/blue flash fires on every tap including scroll-initiating
-   ones. Interactive elements below define their own :active feedback. */
-a,
-button {
-    -webkit-tap-highlight-color: transparent
-}
-
-h1,
-h2,
-h3,
-h4 {
-    font-family: 'Nunito', 'Inter', Arial, sans-serif;
-    line-height: 1.2;
-    margin: 0
+h1, h2, h3 {
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin: 0;
 }
 
 p {
-    margin: 0
-}
-
-img {
-    max-width: 100%
+    margin: 0 0 1em;
 }
 
 a {
-    color: var(--accent-secondary);
-    text-decoration: none;
-    font-weight: 600;
-    transition: color .2s
+    color: inherit;
+    text-decoration-color: var(--line-strong);
+    text-underline-offset: 3px;
+    transition: color 150ms ease, text-decoration-color 150ms ease;
 }
 
 a:hover {
-    color: var(--accent-primary)
+    color: var(--accent);
+    text-decoration-color: currentColor;
 }
 
 :focus-visible {
-    outline: 2px solid var(--accent-primary);
+    outline: 2px solid var(--accent);
     outline-offset: 3px;
-    border-radius: 4px
+    border-radius: 1px;
+}
+
+::selection {
+    background: var(--accent);
+    color: var(--bg);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.mono {
+    font-family: var(--font-mono);
+    font-weight: 400;
+}
+
+.shell {
+    max-width: var(--shell);
+    margin-inline: auto;
+    padding-inline: clamp(20px, 5vw, 48px);
 }
 
 .skip-link {
-    position: absolute;
-    left: -9999px;
-    top: 0;
+    position: fixed;
+    top: -100px;
+    left: 16px;
     z-index: 100;
-    padding: .7rem 1.1rem;
-    background: var(--bg-dark-card);
-    color: var(--text-primary);
-    border: 1px solid var(--accent-primary);
-    border-radius: 0 0 8px 0
+    background: var(--accent);
+    color: var(--bg);
+    padding: 10px 16px;
+    font: 500 13px var(--font-mono);
+    transition: top 150ms ease;
 }
 
 .skip-link:focus {
-    left: 0
+    top: 12px;
 }
 
-/* ========== Backdrop ==================================================== */
+/* -------------------------------------------------------------- backdrop -- */
+/* Hairline grid + film grain. Composited once, costs nothing to scroll. */
 
-/* Fixed and pointer-events-free so it never participates in layout or hit
-   testing. Two static radial glows plus a grid: no JS, no animation loop. */
 .backdrop {
     position: fixed;
     inset: 0;
     z-index: -1;
-    overflow: hidden;
-    pointer-events: none
-}
-
-.backdrop-glow {
-    position: absolute;
-    width: 60vmax;
-    height: 60vmax;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: .55
-}
-
-.backdrop-glow-a {
-    top: -22vmax;
-    left: -14vmax;
-    background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%)
-}
-
-.backdrop-glow-b {
-    bottom: -26vmax;
-    right: -16vmax;
-    background: radial-gradient(circle, var(--shadow-color) 0%, transparent 70%)
-}
-
-.backdrop-grid {
-    position: absolute;
-    inset: 0;
-    opacity: .35;
+    pointer-events: none;
     background-image:
-        linear-gradient(var(--border-color) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
-    background-size: 64px 64px;
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 0%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 0%, transparent 75%)
+        linear-gradient(to right, rgba(255, 255, 255, 0.016) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.016) 1px, transparent 1px),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 88px 88px, 88px 88px, 160px 160px;
 }
 
-/* ========== Layout shell ================================================ */
-
-.shell {
-    width: 100%;
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 0 1.5rem
-}
-
-.section {
-    padding: 4.5rem 1.5rem;
-    /* Belt-and-braces with html{scroll-padding-top}: Safari has historically
-       been unreliable about scroll-padding on the scrolling element. */
-    scroll-margin-top: 78px
-}
-
-.section-head {
-    margin-bottom: 2rem
-}
-
-.section-head h2 {
-    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
-    color: var(--text-primary);
-    letter-spacing: -.01em
-}
-
-.section-head h2::after {
-    content: "";
-    display: block;
-    width: 52px;
-    height: 3px;
-    margin-top: .7rem;
-    border-radius: 2px;
-    background: var(--btn-gradient)
-}
-
-.section-sub {
-    margin-top: .8rem;
-    color: var(--text-muted);
-    font-size: .95rem
-}
-
-.panel {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 1.75rem;
-    backdrop-filter: blur(10px)
-}
-
-/* ========== Header ====================================================== */
+/* ---------------------------------------------------------------- header -- */
 
 .site-header {
     position: sticky;
     top: 0;
     z-index: 50;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-color);
-    backdrop-filter: blur(14px)
+    height: var(--header-h);
+    background: rgba(10, 10, 11, 0.94);
+    border-bottom: 1px solid var(--line);
 }
 
 .site-header-inner {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
-    height: 62px
+    gap: 32px;
+    height: 100%;
 }
 
 .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: .6rem;
-    /* Standalone target rather than a link inside a sentence, so it gets the
-       full 44px hit box; the text itself is only ~27px tall. */
-    min-height: 44px;
-    font-family: 'Nunito', 'Inter', sans-serif;
-    font-weight: 800;
-    font-size: 1.05rem;
-    color: var(--text-primary)
-}
-
-.brand:hover {
-    color: var(--text-primary)
-}
-
-.brand-mark {
-    color: var(--accent-primary);
-    font-weight: 700
+    font: 600 19px/1 var(--font-sans);
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    color: var(--ink);
 }
 
 .brand-accent {
-    color: var(--accent-primary)
+    color: var(--accent);
 }
 
 .site-nav {
-    display: flex;
-    gap: 1.4rem;
     margin-left: auto;
-    font-size: .92rem
+    display: flex;
+    align-items: center;
+    gap: 28px;
 }
 
 .site-nav a {
-    color: var(--text-secondary);
-    font-weight: 500
+    font: 500 12px/1 var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    text-decoration: none;
+    color: var(--ink-dim);
 }
 
 .site-nav a:hover {
-    color: var(--accent-primary)
+    color: var(--ink);
 }
 
-#theme-switcher {
-    flex-shrink: 0;
-    width: 44px;
-    height: 44px;
-    display: grid;
-    place-items: center;
-    font-size: 1.1rem;
-    cursor: pointer;
-    background: var(--bg-card);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-    border-radius: 50%;
-    transition: transform .2s, border-color .2s
+.site-nav a.nav-external {
+    color: var(--ink-faint);
 }
 
-#theme-switcher:hover {
-    transform: rotate(20deg);
-    border-color: var(--accent-primary)
+.site-nav a.nav-external:hover {
+    color: var(--accent);
 }
 
-/* ========== Nav toggle (mobile only) ==================================== */
-
-/* Desktop hides this outright so it leaves the a11y tree entirely: the full
-   nav is visible there and a collapsed-menu control would be a lie to AT. */
 .nav-toggle {
     display: none;
-    flex-shrink: 0;
-    width: 44px;
-    height: 44px;
-    place-items: center;
+    margin-left: auto;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    background: transparent;
     cursor: pointer;
-    background: var(--bg-card);
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-    border-radius: 10px
+    position: relative;
 }
 
-/* The bars are one element plus two pseudos, so the whole glyph animates into
-   an X with transforms alone: no width/height changes, nothing that reflows. */
 .nav-toggle-bars,
 .nav-toggle-bars::before,
 .nav-toggle-bars::after {
     display: block;
     width: 18px;
-    height: 2px;
-    border-radius: 2px;
-    background: currentColor;
-    transition: transform .25s ease, opacity .2s ease
+    height: 1.5px;
+    background: var(--ink);
+    position: absolute;
+    left: 11px;
+    transition: transform 200ms ease, opacity 150ms ease;
 }
 
-/* Anchors the two absolutely positioned bars to this element rather than to
-   the sticky header, which is the next positioned ancestor. */
 .nav-toggle-bars {
-    position: relative
+    top: 20px;
 }
 
 .nav-toggle-bars::before,
 .nav-toggle-bars::after {
     content: "";
-    position: absolute
+    left: 0;
 }
 
 .nav-toggle-bars::before {
-    transform: translateY(-6px)
+    top: -6px;
 }
 
 .nav-toggle-bars::after {
-    transform: translateY(6px)
+    top: 6px;
 }
 
 .nav-toggle[aria-expanded="true"] .nav-toggle-bars {
-    /* Middle bar vanishes; the outer two rotate through each other into an X. */
-    background: transparent
+    background: transparent;
 }
 
 .nav-toggle[aria-expanded="true"] .nav-toggle-bars::before {
-    transform: translateY(0) rotate(45deg)
+    transform: translateY(6px) rotate(45deg);
 }
 
 .nav-toggle[aria-expanded="true"] .nav-toggle-bars::after {
-    transform: translateY(0) rotate(-45deg)
+    transform: translateY(-6px) rotate(-45deg);
 }
 
-/* Dimmer behind the mobile drawer. Lives outside the header so it can cover
-   the page without fighting the header's own stacking context; kept at
-   opacity 0 / pointer-events:none on desktop where the drawer never opens. */
 .nav-scrim {
     position: fixed;
     inset: 0;
     z-index: 40;
-    background: rgba(0, 0, 0, .55);
+    background: rgba(0, 0, 0, 0.62);
     opacity: 0;
     pointer-events: none;
-    transition: opacity .28s ease
+    transition: opacity 200ms ease;
 }
 
-body[data-nav-open="true"] .nav-scrim {
+body[data-nav-open] .nav-scrim {
     opacity: 1;
-    pointer-events: auto
+    pointer-events: auto;
 }
 
-/* ========== Hero ======================================================== */
+/* ------------------------------------------------------------------ hero -- */
 
 .hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 3rem;
-    padding-top: 5rem;
-    padding-bottom: 4rem
+    position: relative;
+    min-height: calc(100svh - var(--header-h));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: clamp(64px, 10vh, 120px) clamp(32px, 6vh, 64px);
+    overflow: hidden;
+}
+
+.hero-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
 }
 
 .eyebrow {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: .5rem;
-    padding: .35rem .85rem;
-    font-size: .78rem;
-    font-weight: 600;
-    letter-spacing: .04em;
+    gap: 14px;
+    font: 500 12px/1 var(--font-mono);
     text-transform: uppercase;
-    color: var(--text-secondary);
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 999px
+    letter-spacing: 0.14em;
+    color: var(--ink-dim);
+    margin: 0 0 28px;
 }
 
-.status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--accent-primary);
-    box-shadow: 0 0 0 3px var(--glow-color)
+.eyebrow-rule {
+    width: 44px;
+    height: 1px;
+    background: var(--accent);
+    flex: none;
 }
 
 .hero h1 {
-    margin: 1.1rem 0 0;
-    /* Floor lowered from 2.4rem: at 320px the old floor left "Daniel Wambua"
-       filling nearly the whole line box with no room to wrap gracefully. */
-    font-size: clamp(2.1rem, 7vw, 3.9rem);
-    letter-spacing: -.02em;
-    background: var(--btn-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent
+    font-size: clamp(3.6rem, 10vw, 6.4rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+    margin: 0 0 20px;
 }
 
-.lede {
-    margin-top: 1rem;
-    max-width: 34rem;
-    font-size: 1.05rem;
-    color: var(--text-secondary)
+.hero h1 .accent {
+    color: var(--accent);
+}
+
+.hero-role {
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    font-weight: 500;
+    color: var(--ink);
+    margin: 0 0 14px;
+}
+
+.hero-lede {
+    color: var(--ink-dim);
+    max-width: 54ch;
+    margin: 0 0 36px;
 }
 
 .hero-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: .8rem;
-    margin-top: 1.8rem
+    align-items: center;
+    gap: 18px;
 }
 
-.hero-facts {
+.hero-meta {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-wrap: wrap;
-    gap: .5rem 1.6rem;
-    margin: 2rem 0 0;
-    padding: 0;
-    list-style: none;
-    font-size: .88rem;
-    color: var(--text-muted)
+    gap: 12px 36px;
+    margin-top: clamp(48px, 8vh, 96px);
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font: 400 12px/1.7 var(--font-mono);
+    letter-spacing: 0.04em;
+    color: var(--ink-faint);
 }
 
-.hero-facts strong {
-    color: var(--text-primary)
+.hero-meta a {
+    color: var(--ink-dim);
 }
 
-.hero-portrait {
-    position: relative;
-    flex-shrink: 0
-}
-
-.hero-portrait img {
-    display: block;
-    width: 280px;
-    height: 280px;
-    object-fit: cover;
-    border-radius: 24px;
-    border: 1px solid var(--border-color);
-    box-shadow: 0 18px 50px var(--shadow-color)
-}
-
-.hero-portrait::after {
-    content: "";
-    position: absolute;
-    inset: -14px;
-    z-index: -1;
-    border-radius: 32px;
-    background: var(--btn-gradient);
-    opacity: .18;
-    filter: blur(24px)
-}
-
-/* ========== Buttons ===================================================== */
+/* --------------------------------------------------------------- buttons -- */
 
 .btn {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: .5rem;
-    min-height: 44px;
-    padding: .7rem 1.35rem;
-    font-size: .92rem;
-    font-weight: 600;
-    font-family: inherit;
-    border-radius: 10px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-card);
-    color: var(--text-primary);
-    cursor: pointer;
-    transition: transform .18s, border-color .18s, box-shadow .18s
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    border-color: var(--accent-primary);
-    color: var(--text-primary)
-}
-
-.btn:active {
-    transform: scale(.97)
+    gap: 8px;
+    font: 500 13px/1 var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    border-radius: 12px;
+    padding: 13px 24px;
+    transition: background 200ms cubic-bezier(0.2, 0.7, 0.25, 1),
+        color 150ms ease, border-color 150ms ease;
 }
 
 .btn-primary {
-    background: var(--btn-gradient);
-    border-color: transparent;
-    color: #fff
+    background: var(--accent);
+    color: var(--bg);
 }
 
 .btn-primary:hover {
-    background: var(--btn-gradient-hover);
-    color: #fff;
-    box-shadow: 0 10px 26px var(--glow-color)
-}
-
-.btn-primary:active {
-    transform: scale(.97)
+    background: var(--accent-hover);
+    color: var(--bg);
 }
 
 .btn-ghost {
-    background: transparent
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+    padding: 12px 23px;
 }
 
-.btn-secondary {
-    background: transparent;
-    color: var(--accent-secondary)
+.btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
 }
 
-/* ========== About ======================================================= */
+/* -------------------------------------------------------------- sections -- */
 
-.prose p+p {
-    margin-top: 1rem
+.section {
+    padding-block: clamp(64px, 9vh, 110px) clamp(56px, 8vh, 96px);
+}
+
+.section-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 14px 20px;
+    border-top: 1px solid var(--line-strong);
+    padding-top: 14px;
+    margin-bottom: clamp(36px, 5vh, 56px);
+}
+
+.section-index {
+    font: 500 13px/1 var(--font-mono);
+    color: var(--accent);
+    margin: 0;
+}
+
+.section-head h2 {
+    font-size: clamp(1.5rem, 3vw, 1.9rem);
+    font-weight: 600;
+}
+
+.section-sub {
+    margin: 0 0 0 auto;
+    font-size: 14.5px;
+    color: var(--ink-dim);
+    max-width: 44ch;
+    text-align: right;
+}
+
+/* ------------------------------------------------------------------ about -- */
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: clamp(36px, 6vw, 88px);
+    align-items: start;
+}
+
+.about-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.portrait {
+    margin: 0;
+}
+
+.portrait img {
+    width: 100%;
+    border: 1px solid var(--line);
+    filter: grayscale(1) contrast(1.04);
+    transition: filter 300ms ease;
+}
+
+.portrait:hover img,
+.portrait:focus-within img {
+    filter: none;
+}
+
+.about-note {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink-faint);
+    margin: 0;
+}
+
+.about-note a {
+    color: var(--ink-dim);
 }
 
 .prose {
-    color: var(--text-secondary);
-    max-width: 68ch
+    max-width: 62ch;
+    font-size: 17px;
 }
 
-.prose b,
-.prose strong {
-    color: var(--text-primary)
+.prose p:last-child {
+    margin-bottom: 0;
 }
 
-.callout {
-    margin-top: 1.5rem !important;
-    padding: 1rem 1.1rem;
-    border-left: 3px solid var(--accent-primary);
-    border-radius: 0 10px 10px 0;
-    background: var(--bg-dark-card);
-    font-size: .93rem
+/* ------------------------------------------------------------------- work -- */
+/* Cards, not end-to-end rows: two per line, frosted-glass surfaces, soft
+   corners. The glass is deliberately quiet on the near-black ground: a faint
+   white wash, backdrop blur over the grid backdrop, a hairline border and a
+   top-edge highlight, lifted slightly on hover. */
+
+.glass {
+    background: rgba(255, 255, 255, 0.028);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    -webkit-backdrop-filter: blur(18px) saturate(1.25);
+    backdrop-filter: blur(18px) saturate(1.25);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition:
+        transform 320ms cubic-bezier(0.2, 0.7, 0.25, 1),
+        background 200ms ease,
+        border-color 200ms ease,
+        box-shadow 320ms ease;
 }
 
-/* ========== Tag filter ================================================== */
-
-.tags-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .5rem;
-    margin-bottom: 2rem
+.glass:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.07),
+        0 24px 48px -24px rgba(0, 0, 0, 0.75);
 }
 
-.tag {
-    /* min-height rather than taller padding: the pill keeps its compact look
-       while the hit box reaches the 44px touch minimum. */
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    padding: .45rem 1rem;
-    font-family: inherit;
-    font-size: .82rem;
-    font-weight: 600;
-    color: var(--tag-text);
-    background: var(--tag-gradient);
-    border: 1px solid var(--border-color);
-    border-radius: 999px;
-    cursor: pointer;
-    transition: color .18s, border-color .18s, transform .18s
-}
-
-.tag:hover {
-    transform: translateY(-2px);
-    border-color: var(--accent-primary);
-    color: var(--text-primary)
-}
-
-.tag.active {
-    background: var(--btn-gradient);
-    border-color: transparent;
-    color: #fff
-}
-
-/* ========== Project list (markup generated by js/script.js) ============== */
-
-.project-section+.project-section {
-    margin-top: 3rem
-}
-
-.section-title {
-    margin-bottom: 1.25rem;
-    font-size: 1.15rem;
-    color: var(--text-primary)
-}
-
-.project-list {
+.work-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: grid;
-    gap: 1.25rem
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
 }
 
-/* The cards sit in a .project-list *inside* each .project-section (see
-   loadProjects), so they lay out side by side instead of stacking.
-   Content width in the shell is 1120 - 48 padding = 1072, gap is 20. Three
-   tracks fit whenever 3*min + 40 <= 1072, i.e. min <= 344 == which would break
-   the four writeups 3 + 1 and leave an orphan. 360 forces two even columns
-   (2*360 + 20 = 740) and collapses to one below ~788px viewport.
-   min() keeps that single column from overflowing narrower screens. */
-.project-section .project-list,
-.project-grid {
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr))
-}
-
-.project-card {
+.work-card {
     display: flex;
     flex-direction: column;
+    padding: 13px 13px 22px;
+}
+
+.card-media {
+    display: block;
+    border-radius: 12px;
     overflow: hidden;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 14px;
-    transition: transform .2s, border-color .2s, box-shadow .2s
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--bg-raised);
 }
 
-.project-card:hover {
-    border-color: var(--accent-primary);
-    box-shadow: 0 14px 34px var(--shadow-color)
-}
-
-.project-card.hidden {
-    display: none
-}
-
-.project-image {
-    order: -1;
-    margin: 0;
-    line-height: 0
-}
-
-.project-image img {
+.card-media img {
     width: 100%;
-    height: 158px;
-    object-fit: cover
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    transition: transform 500ms cubic-bezier(0.2, 0.7, 0.25, 1);
 }
 
-.project-content {
+.glass:hover .card-media img {
+    transform: scale(1.03);
+}
+
+.work-card-body {
     display: flex;
     flex-direction: column;
     flex: 1;
-    padding: 1.25rem
+    padding: 18px 10px 0;
 }
 
-.project-content h3 {
-    margin: .65rem 0 0;
-    font-size: 1.05rem;
-    color: var(--text-primary)
-}
-
-.post-meta {
+.work-kicker {
     display: flex;
     align-items: center;
-    gap: .6rem;
-    flex-wrap: wrap
-}
-
-.post-type {
-    padding: .2rem .6rem;
-    font-size: .7rem;
-    font-weight: 700;
-    letter-spacing: .04em;
+    gap: 10px;
+    margin: 0 0 12px;
+    font: 500 11px/1 var(--font-mono);
     text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+}
+
+.wk-status {
+    color: var(--accent);
+    border: 1px solid rgba(229, 72, 77, 0.4);
     border-radius: 999px;
-    background: var(--bg-dark-card);
-    border: 1px solid var(--border-color);
-    color: var(--accent-primary)
+    padding: 4px 11px;
 }
 
-.post-type.pentesting,
-.post-type.chitchat {
-    color: var(--accent-secondary)
+.work-card-body h3 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
 }
 
-.post-type.blog,
-.post-type.github {
-    color: var(--accent-tertiary)
+.work-card-body h3 a {
+    text-decoration: none;
 }
 
-.post-date {
-    font-size: .76rem;
-    color: var(--text-muted)
+.work-card-body h3 a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
 }
 
-.decore {
-    margin-top: .7rem;
-    font-size: .9rem;
-    color: var(--text-secondary)
+.work-desc {
+    color: var(--ink-dim);
+    font-size: 14.5px;
+    margin: 0 0 14px;
 }
 
-.repo-language,
-.repo-stats {
-    display: flex;
-    align-items: center;
-    gap: .4rem;
-    margin-top: .8rem;
-    font-size: .8rem;
-    color: var(--text-muted)
+.work-stack {
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    color: var(--ink-faint);
+    margin: 0 0 20px;
 }
 
-.lang-dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--accent-tertiary)
-}
+/* Pills sit at the bottom of every card so the grid rows line up. */
 
-.project-links {
+.work-links {
+    list-style: none;
     display: flex;
     flex-wrap: wrap;
-    gap: .6rem;
-    margin-top: auto;
-    padding-top: 1.1rem
+    gap: 10px;
+    margin: auto 0 0;
+    padding: 0;
 }
 
-.project-links .btn {
-    padding: .5rem 1rem;
-    font-size: .84rem
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font: 500 11.5px/1 var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    text-decoration: none;
+    color: var(--ink-dim);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 9px 16px;
+    transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
 }
 
-.see-more-container {
-    margin-top: 1.5rem;
-    text-align: center
+.pill:hover {
+    color: var(--ink);
+    border-color: rgba(255, 255, 255, 0.26);
+    background: rgba(255, 255, 255, 0.045);
 }
 
-.see-more-text {
-    font-size: .9rem;
-    color: var(--text-muted)
+.work-more {
+    font-size: 13.5px;
+    color: var(--ink-faint);
+    margin: 26px 0 0;
+    line-height: 1.9;
 }
 
-.loading-placeholder,
-.error-message {
-    grid-column: 1 / -1;
-    padding: 2.5rem 1.5rem;
-    text-align: center;
-    color: var(--text-muted);
-    background: var(--bg-card);
-    border: 1px dashed var(--border-color);
-    border-radius: 14px
+.work-more a {
+    color: var(--ink-dim);
 }
 
-.loading-placeholder::before {
-    content: "";
-    display: block;
-    width: 26px;
-    height: 26px;
-    margin: 0 auto 1rem;
-    border: 2px solid var(--border-color);
-    border-top-color: var(--accent-primary);
-    border-radius: 50%;
-    animation: spin .8s linear infinite
-}
+/* ----------------------------------------------------------------- research -- */
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg)
-    }
-}
+/* Same card language as the work grid: two per line, glass surface, media
+   on top, text below. Kept visually identical to the project cards so the
+   two sections read as one system. */
 
-/* ========== Highlights ================================================== */
-
-.highlights-grid {
+.research-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 1.25rem
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
 }
 
-.highlight-card {
-    padding: 1.5rem;
-    text-align: center;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 14px;
-    transition: transform .2s, border-color .2s
-}
-
-.highlight-card:hover {
-    transform: translateY(-3px);
-    border-color: var(--accent-primary)
-}
-
-.highlight-icon {
-    display: block;
-    font-size: 1.6rem;
-    margin-bottom: .5rem
-}
-
-.highlight-card h3 {
-    font-size: .95rem;
-    font-weight: 700;
-    color: var(--text-secondary)
-}
-
-.stat-number {
-    margin-top: .5rem;
-    font-family: 'Nunito', 'Inter', sans-serif;
-    font-size: 2rem;
-    font-weight: 800;
-    line-height: 1;
-    color: var(--accent-primary)
-}
-
-.stat-label {
-    margin-top: .4rem;
-    font-size: .82rem;
-    color: var(--text-muted)
-}
-
-.platforms {
-    margin-top: .5rem;
-    font-size: .9rem
-}
-
-.htb-card {
-    grid-column: span 2;
+.wcard {
     display: flex;
     flex-direction: column;
+    padding: 13px 13px 22px;
+}
+
+.wcard .card-media img {
+    aspect-ratio: 16 / 9;
+}
+
+.wcard-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 18px 10px 0;
+}
+
+/* Meta runs along the top of the body: type · platform · difficulty on the
+   left, date pushed to the right edge. */
+
+.wcard-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    font: 500 11px/1.5 var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    margin: 0 0 12px;
+}
+
+.wcard-meta .wt-type {
+    color: var(--ink);
+}
+
+.wcard-meta .wt-diff {
+    color: var(--accent);
+}
+
+.wcard-meta .wt-date {
+    flex: none;
+    letter-spacing: 0.06em;
+}
+
+.wcard-body h3 {
+    font-size: 1.05rem;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+}
+
+.wcard-body h3 a {
+    text-decoration: none;
+}
+
+.wcard-body h3 a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+}
+
+.wcard-sum {
+    color: var(--ink-dim);
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* A missing feature image would leave the media block collapsed to its
+   border; drop it entirely instead. */
+
+.wcard .card-media:empty,
+.wcard .card-media[hidden] {
+    display: none;
+}
+
+.research-fallback {
+    color: var(--ink-dim);
+    font-size: 13.5px;
+    padding-top: 22px;
+}
+
+.research-empty {
+    color: var(--ink-faint);
+    font-size: 13.5px;
+    padding: 22px 0;
+    margin: 0;
+}
+
+/* Latest notes: compact glass tiles, three across. */
+
+.notes {
+    margin-top: 48px;
+}
+
+.notes-head {
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    margin: 0 0 14px;
+}
+
+.notes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.note-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px 20px;
+    text-decoration: none;
+    color: var(--ink-dim);
+    font-size: 14.5px;
+    line-height: 1.5;
+}
+
+.note-card:hover {
+    color: var(--ink);
+}
+
+.note-card .note-date {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    margin-top: auto;
+    transition: color 150ms ease;
+}
+
+.note-card:hover .note-date {
+    color: var(--accent);
+}
+
+/* ------------------------------------------------------------ capabilities -- */
+
+.cap-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px 48px;
+}
+
+.cap {
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+}
+
+.cap h3 {
+    font: 500 13px/1 var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink);
+    margin: 0 0 12px;
+    display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 1rem
+    gap: 10px;
+}
+
+.cap h3::before {
+    content: "";
+    width: 14px;
+    height: 1px;
+    background: var(--accent);
+    flex: none;
+}
+
+.cap p {
+    color: var(--ink-dim);
+    font-size: 14.5px;
+    margin: 0;
+}
+
+/* ------------------------------------------------------------------ record -- */
+
+.record-grid {
+    border-bottom: 1px solid var(--line);
+}
+
+.record-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+    border-top: 1px solid var(--line);
+    padding: 24px 16px;
+    margin-inline: -16px;
+    transition: background 150ms ease;
+}
+
+.record-row:hover {
+    background: var(--bg-raised);
+}
+
+.record-key {
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    margin: 3px 0 0;
+}
+
+.record-val {
+    color: var(--ink-dim);
+    font-size: 15.5px;
+    margin: 0;
+    max-width: 72ch;
+}
+
+.record-val a {
+    color: var(--ink);
+}
+
+.htb-line {
+    margin: 28px 0 0;
 }
 
 .htb-badge {
-    width: 100%;
-    max-width: 420px;
-    height: auto;
-    border-radius: 10px
+    width: 340px;
+    max-width: 100%;
+    opacity: 0.92;
+    transition: opacity 150ms ease;
 }
 
-/* ========== Contact ===================================================== */
+.htb-line:hover .htb-badge {
+    opacity: 1;
+}
 
-.contact-panel {
+/* ----------------------------------------------------------------- contact -- */
+
+.section-contact {
+    padding-bottom: clamp(80px, 12vh, 140px);
+}
+
+.contact-lede {
+    color: var(--ink-dim);
+    font-size: 17px;
+    margin: 0 0 10px;
+}
+
+.contact-mail {
+    margin: 0 0 40px;
+}
+
+.contact-mail a {
+    font: 600 clamp(1.5rem, 4.5vw, 2.6rem)/1.2 var(--font-sans);
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    color: var(--ink);
+    border-bottom: 2px solid var(--line-strong);
+    padding-bottom: 4px;
+    transition: color 150ms ease, border-color 150ms ease;
+}
+
+.contact-mail a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+.contact-links {
+    list-style: none;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem
+    gap: 12px;
+    margin: 0;
+    padding: 0;
 }
 
-.contact-primary {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: .8rem
-}
+/* Bordered chips: icon carries the brand color, label stays in the site
+   palette. Hover lights the border instead of recoloring the icon. */
 
-.contact-line {
+.contact-links a {
     display: inline-flex;
     align-items: center;
-    gap: .55rem;
-    min-height: 44px;
-    font-size: .95rem;
-    color: var(--text-primary);
-    /* The address is a single long token; without this it overflows the panel
-       on a 320px screen rather than wrapping. */
-    overflow-wrap: anywhere
+    gap: 10px;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    text-decoration: none;
+    color: var(--ink-dim);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 11px 18px;
+    transition: border-color 150ms ease, color 150ms ease,
+        background 200ms cubic-bezier(0.2, 0.7, 0.25, 1);
 }
 
-.contact-line svg {
-    color: var(--accent-primary)
-}
-
-.contact-line:hover {
-    color: var(--accent-primary)
-}
-
-.whatsapp-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: .5rem;
-    min-height: 44px;
-    padding: .6rem 1.1rem;
-    font-size: .88rem;
-    color: #fff;
-    background: #25D366;
-    border-radius: 10px;
-    transition: transform .18s
-}
-
-.whatsapp-btn:hover {
-    transform: translateY(-2px);
-    color: #fff
-}
-
-.social-links {
-    display: flex;
-    gap: .6rem
+.contact-links a:hover {
+    color: var(--ink);
+    border-color: var(--line-strong);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .social-icon {
-    width: 44px;
-    height: 44px;
-    display: grid;
-    place-items: center;
-    color: var(--text-secondary);
-    background: var(--bg-dark-card);
-    border: 1px solid var(--border-color);
-    border-radius: 12px
+    width: 17px;
+    height: 17px;
+    flex: none;
 }
 
-.social-icon:hover {
-    color: var(--accent-primary);
-    border-color: var(--accent-primary)
-}
+/* Brand colors, chosen to read on the near-black ground. GitHub and X are
+   monochrome brands, so they stay off-white like the site ink. */
 
-/* The guns.lol mark is raster artwork, so it is painted as currentColor through
-   an alpha mask. That is what lets it inherit the theme accent on hover exactly
-   like the sibling SVG icons, across all 12 themes. */
+.si-github { color: #e6edf3; }
+.si-linkedin { color: #0a66c2; }
+.si-x { color: #e6edf3; }
+.si-tiktok { color: #25f4ee; }
+.si-blog { color: var(--accent); }
+.si-whatsapp { color: #25d366; }
+.si-rss { color: #f26522; }
+.si-guns { color: #e6edf3; }
+
+/* guns.lol has no SVG logo: the raster mask is applied as a CSS mask and
+   painted with currentColor, same trick as the old site. */
+
 .icon-guns {
-    width: 22px;
-    height: 22px;
+    display: inline-block;
     background-color: currentColor;
-    -webkit-mask: url(../images/guns-mask.webp) center / contain no-repeat;
-    mask: url(../images/guns-mask.webp) center / contain no-repeat
+    -webkit-mask: url("../images/guns-mask.webp") center / contain no-repeat;
+    mask: url("../images/guns-mask.webp") center / contain no-repeat;
 }
 
-/* Without mask support the span would paint as a solid square, which reads as a
-   rendering bug. Hiding it leaves the labelled, still-clickable link. */
-@supports not ((-webkit-mask: url(#m)) or (mask: url(#m))) {
-    .icon-guns {
-        display: none
-    }
-}
-
-/* ========== Footer ====================================================== */
+/* ----------------------------------------------------------------- footer -- */
 
 .site-footer {
-    margin-top: 2rem;
-    padding: 1.75rem 0;
-    border-top: 1px solid var(--border-color);
-    background: var(--bg-secondary)
+    border-top: 1px solid var(--line);
+    padding-block: 28px;
 }
 
 .site-footer-inner {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: .6rem;
-    font-size: .86rem;
-    color: var(--text-muted)
+    align-items: baseline;
+    gap: 10px 32px;
 }
 
-/* ========== Responsive ================================================== */
+.site-footer p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--ink-faint);
+}
+
+.site-footer a {
+    color: var(--ink-dim);
+}
+
+/* --------------------------------------------------------------- reveal ----- */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 400ms ease, transform 400ms ease;
+}
+
+.reveal.in {
+    opacity: 1;
+    transform: none;
+}
+
+/* ------------------------------------------------------------- responsive -- */
+
+@media (max-width: 1024px) {
+    .cap-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 
 @media (max-width: 860px) {
-    .hero {
-        grid-template-columns: 1fr;
-        text-align: left;
-        padding-top: 2.5rem;
-        padding-bottom: 3rem;
-        gap: 2.25rem
-    }
-
-    /* The pill wraps to two lines at phone widths and pushes the name down for
-       something the lede already says. Hidden below 860px; still read on
-       desktop where it fits on one line. */
-    .eyebrow {
-        display: none
-    }
-
-    /* Portrait follows the copy in source order, and on mobile it stays there:
-       leading with a 190px face pushed the name and the pitch below the fold.
-       Text first, face as the closer. The children carry their own margins, so
-       the rhythm is tightened here rather than with a flex gap, which would
-       stack on top of them. */
-    .hero h1 {
-        /* The pill above it is gone, so the hero padding sets the top gap. */
-        margin-top: 0
-    }
-
-    .hero .lede {
-        margin-top: .85rem
-    }
-
-    .hero-actions {
-        margin-top: 1.4rem
-    }
-
-    .hero-facts {
-        gap: .4rem 1.2rem;
-        margin-top: 1.4rem
-    }
-
-    .hero-portrait {
-        /* Centred in the column rather than left-aligned under the copy, which
-           left a lopsided gap on the right at every phone width. */
-        justify-self: center
-    }
-
-    .hero-portrait img {
-        width: 200px;
-        height: 200px;
-        border-radius: 20px
-    }
-
-    /* A 24px blur on a -14px inset spills past the viewport edge and, at
-       z-index:-1, paints behind the page background instead of around the
-       photo. Tighter and dimmer keeps it a rim rather than a smear. */
-    .hero-portrait::after {
-        inset: -8px;
-        filter: blur(16px);
-        opacity: .14
-    }
-
-    .brand {
-        margin-right: auto
-    }
-
-    .section {
-        padding: 3.25rem 1.5rem
-    }
-
-    .htb-card {
-        grid-column: auto
-    }
-
-    /* ----- Collapsed nav ------------------------------------------------ */
-
     .nav-toggle {
-        display: grid;
-        order: 3
+        display: block;
     }
 
-    /* backdrop-filter makes an element a containing block for position:fixed
-       descendants, which would resolve the drawer against this 62px bar
-       instead of the viewport — it would render as a sliver under the header.
-       Dropping the blur restores viewport-relative positioning; the opaque
-       card background replaces what the blur was buying, and the header loses
-       a compositor layer on the way. */
-    .site-header {
-        background: var(--bg-dark-card);
-        backdrop-filter: none
-    }
-
-    /* The same <nav> as desktop, re-flowed into a drawer pinned to the right
-       edge. `fixed` takes it out of the header's flex row entirely, so the bar
-       keeps its 62px height whether the drawer is open or shut. It sits below
-       the header (top:62px) so the toggle stays visible and tappable while
-       open — closing is never a hunt for a hidden X. */
     .site-nav {
-        display: flex;
         position: fixed;
-        top: 62px;
+        top: 0;
         right: 0;
+        bottom: 0;
         z-index: 45;
+        width: min(300px, 82vw);
+        margin: 0;
         flex-direction: column;
+        align-items: flex-start;
         gap: 0;
-        width: min(78vw, 300px);
-        height: calc(100dvh - 62px);
-        margin-left: 0;
-        padding: .5rem 1.5rem 2rem;
-        overflow-y: auto;
-        overscroll-behavior: contain;
-        /* --bg-secondary is 0.62 alpha and would let the page text read
-           straight through the drawer. --bg-dark-card is 0.95, and stacking it
-           as its own image over itself compounds to ~0.9975 — opaque in
-           practice, still theme-aware, and no new token needed. The blur is
-           insurance for the remainder. */
-        background-color: var(--bg-dark-card);
-        background-image: linear-gradient(var(--bg-dark-card), var(--bg-dark-card));
-        backdrop-filter: blur(14px);
-        border-left: 1px solid var(--border-color);
-        box-shadow: -18px 0 50px var(--shadow-color);
-        font-size: 1rem;
-        /* translate, not width/right: the drawer slides on the compositor with
-           no layout work per frame. */
+        background: #0d0d10;
+        border-left: 1px solid var(--line);
+        padding: 84px 32px 32px;
         transform: translateX(100%);
-        /* The panel is off-screen but still focusable without this, so a Tab
-           press would move focus into a drawer the visitor cannot see.
-           Delayed on close so the slide-out stays visible; instant on open. */
         visibility: hidden;
-        transition: transform .28s ease, visibility 0s linear .28s
+        transition: transform 220ms ease, visibility 220ms;
     }
 
-    .site-nav[data-open="true"] {
+    .site-nav[data-open] {
         transform: translateX(0);
         visibility: visible;
-        transition: transform .28s ease, visibility 0s
     }
 
     .site-nav a {
-        display: flex;
-        align-items: center;
-        min-height: 48px;
-        padding: 0 .25rem;
-        border-bottom: 1px solid var(--border-color)
+        font-size: 14px;
+        padding: 14px 0;
+        width: 100%;
+        border-bottom: 1px solid var(--line);
     }
 
-    /* Drawer is position:fixed, so the bar never has to grow to fit it. */
-    .site-header-inner {
-        height: 62px
+    .hero {
+        min-height: 0;
+        padding-top: clamp(48px, 8vh, 80px);
     }
 
-    /* ----- Backdrop trim ------------------------------------------------ */
-
-    /* `fixed` makes iOS Safari repaint the full-page gradient on every scroll
-       frame. `scroll` lets it composite normally. */
-    body {
-        background-attachment: scroll
+    .hero-meta {
+        margin-top: 48px;
+        flex-direction: column;
+        gap: 6px;
     }
 
-    /* Halved radius and footprint: an 80px blur over a 60vmax box is a large
-       offscreen buffer for a mobile GPU, and at this size the difference is
-       not perceptible. */
-    .backdrop-glow {
-        width: 30vmax;
-        height: 30vmax;
-        filter: blur(40px)
+    .about-grid {
+        grid-template-columns: 1fr;
     }
 
-    .backdrop-glow-a {
-        top: -10vmax;
-        left: -8vmax
+    .about-aside {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 24px;
     }
 
-    .backdrop-glow-b {
-        bottom: -12vmax;
-        right: -8vmax
+    .portrait {
+        width: 132px;
+        flex: none;
     }
 
-    /* Cards are already 0.9-alpha over the gradient, so the blur behind them
-       costs a compositor layer each to render something nearly invisible. */
-    .panel {
-        backdrop-filter: none
+    .section-sub {
+        margin-left: 0;
+        text-align: left;
     }
 
-    /* ----- Work filter -------------------------------------------------- */
-
-    /* 14 filter pills wrap to ~5 rows at this width and push the project list
-       below the fold. A single swipeable row keeps the section scannable. */
-    .tags-container {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        scroll-snap-type: x proximity;
-        /* Full-bleed so the strip scrolls edge to edge rather than appearing
-           to be cut off inside the shell's padding. */
-        margin-inline: -1.5rem;
-        padding-inline: 1.5rem;
-        padding-bottom: .5rem;
-        scrollbar-width: none;
-        -webkit-overflow-scrolling: touch
+    /* Cards stack one per line; the grid collapses before the columns get
+       too narrow for a media-plus-text card to breathe. */
+    .work-grid,
+    .research-grid {
+        grid-template-columns: 1fr;
     }
 
-    .tags-container::-webkit-scrollbar {
-        display: none
-    }
-
-    .tag {
-        flex: 0 0 auto;
-        scroll-snap-align: start
+    .notes-grid {
+        grid-template-columns: 1fr;
     }
 }
 
-@media (max-width: 560px) {
-    .shell {
-        padding: 0 1.1rem
+@media (max-width: 640px) {
+    .work-card,
+    .wcard {
+        padding: 10px 10px 18px;
     }
 
-    .section {
-        padding: 2.75rem 1.1rem
+    .work-card-body,
+    .wcard-body {
+        padding: 14px 6px 0;
     }
 
-    .panel {
-        padding: 1.25rem
+    .cap-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .record-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding-inline: 12px;
+        margin-inline: -12px;
+    }
+
+    .about-aside {
+        flex-direction: column;
+    }
+
+    .portrait {
+        width: 180px;
     }
 
     .hero-actions .btn {
-        flex: 1 1 100%;
-        justify-content: center
-    }
-
-    .contact-panel {
-        justify-content: center
-    }
-
-    .social-links {
-        flex-wrap: wrap;
-        justify-content: center
-    }
-
-    .backdrop-grid {
-        background-size: 40px 40px
-    }
-
-    /* Shell padding drops to 1.1rem here, so the full-bleed offsets set at
-       860px have to follow it or the strip sits inset by the difference. */
-    .tags-container {
-        margin-inline: -1.1rem;
-        padding-inline: 1.1rem
-    }
-
-    /* Stack rather than sit side by side: at this width the two buttons
-       squeeze the email address into an unreadable column. */
-    .contact-primary {
-        flex-direction: column;
-        align-items: stretch;
-        width: 100%
-    }
-
-    .contact-primary .contact-line {
-        justify-content: center
+        width: 100%;
+        justify-content: center;
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
+/* ---------------------------------------------------------- reduced motion -- */
 
+@media (prefers-reduced-motion: reduce) {
     html {
-        scroll-behavior: auto
+        scroll-behavior: auto;
     }
 
     *,
     *::before,
     *::after {
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: .01ms !important
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .reveal {
+        opacity: 1;
+        transform: none;
     }
 }

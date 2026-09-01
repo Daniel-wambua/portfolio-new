@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://portfolio.havocx.me/sitemap.xml
+Sitemap: https://portfolio.havocsec.me/sitemap.xml
